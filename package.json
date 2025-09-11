@@ -2,7 +2,7 @@
   "name": "diff-viewer",
   "private": true,
   "version": "0.0.0",
-  "description": "A simple diff viewer built with monaco editor",
+  "description": "A simple real-time diff viewer built with monaco editor",
   "type": "module",
   "scripts": {
     "dev": "vite",

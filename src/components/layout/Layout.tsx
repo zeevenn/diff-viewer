@@ -9,7 +9,7 @@ interface LayoutProps {
 
 export const Layout = ({ children, className = '' }: LayoutProps) => {
   return (
-    <div className={`min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors ${className}`}>
+    <div className={`min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900 transition-colors ${className}`}>
       <Header />
       
       {/* Main Content Area */}
