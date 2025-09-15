@@ -2,7 +2,7 @@
   "name": "diff-viewer",
   "private": true,
   "version": "0.0.0",
-  "description": "A simple real-time diff viewer built with monaco editor",
+  "description": "A simple real-time diff viewer including text, image, folder and so on diff.",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -13,8 +13,9 @@
   "keywords": [
     "diff",
     "viewer",
-    "monaco",
-    "editor"
+    "text",
+    "image",
+    "folder"
   ],
   "author": "Ziven <contact@ziven.me>",
   "license": "MIT",

@@ -1,13 +1,13 @@
 # Diff Viewer
 
-A simple real-time diff viewer built with Monaco Editor.
+A simple real-time diff viewer including text, image, folder and so on diff.
 
 ## ✨ Features
 
-- **Side-by-side Comparison**: Compare two text snippets in real-time
-- **Data Safe**: Don't store any data either on the server or the client
-- **Powerful Editor**: Powered by the Monaco Editor
-- **Modern UI**: Clean, intuitive interface built with React and Tailwind CSS
+- [x] **Text Diff**: Side-by-side comparison of two text snippets in real-time
+- [ ] **Image Diff**: Compare two images
+- [ ] **Folder Diff**: Compare two folders
+- [ ] ......
 
 ## 🚀 Live Demo
 
