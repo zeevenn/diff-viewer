@@ -13,7 +13,7 @@ export const Layout = ({ children, className = '' }: LayoutProps) => {
       <Header />
       
       {/* Main Content Area */}
-      <main className="flex-1 max-w-7xl mx-auto flex flex-col px-4 sm:px-6 lg:px-8 py-8 w-full">
+      <main className="flex-1 mx-auto flex flex-col px-4 sm:px-6 lg:px-8 py-8 w-full">
         {children}
       </main>
       
