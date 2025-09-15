@@ -1,22 +1,31 @@
-import { Logo } from '../ui/Logo';
+import { Link } from "react-router";
+import { Logo, NavigationLink } from "../ui";
 
 interface HeaderProps {
   className?: string;
 }
 
-export const Header = ({ className = '' }: HeaderProps) => {
+export const Header = ({ className = "" }: HeaderProps) => {
   return (
-    <header className={`bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 shadow-sm ${className}`}>
+    <header
+      className={`bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 shadow-sm ${className}`}
+    >
       <div className="mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          {/* Logo */}
-          <div className="flex items-center">
-            <div className="flex-shrink-0 flex items-center space-x-3">
+          <div className="flex items-center space-x-6">
+            {/* Logo */}
+            <Link to="/" className="flex-shrink-0 flex items-center space-x-3">
               <Logo className="w-10 h-10" />
               <h1 className="text-xl font-bold text-gray-900 dark:text-white">
                 Diff Viewer
               </h1>
-            </div>
+            </Link>
+
+            {/* Navigation */}
+            <nav className="flex space-x-6">
+              <NavigationLink to="/">Text Diff</NavigationLink>
+              <NavigationLink to="/image">Image Diff</NavigationLink>
+            </nav>
           </div>
 
           {/* Actions */}

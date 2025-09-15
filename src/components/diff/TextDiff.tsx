@@ -1,18 +1,18 @@
 import { useState, useRef } from 'react';
-import { DiffEditor as MonacoDiffEditor, type MonacoDiffEditor as MonacoDiffEditorType } from '@monaco-editor/react';
-import { useTheme } from '../hooks/useTheme';
+import { DiffEditor, type MonacoDiffEditor } from '@monaco-editor/react';
+import { useTheme } from '../../hooks/useTheme';
 
-interface DiffEditorProps {
+interface TextDiffProps {
   className?: string;
 }
 
-export const DiffEditor = ({ className = '' }: DiffEditorProps) => {
+export const TextDiff = ({ className = '' }: TextDiffProps) => {
   const [originalText, setOriginalText] = useState('function hello() {\n  console.log("Hello World");\n}');
   const [modifiedText, setModifiedText] = useState('function hello() {\n  console.log("Hello, World!");\n  return "Hello";\n}');
-  const editorRef = useRef<MonacoDiffEditorType | null>(null);
+  const editorRef = useRef<MonacoDiffEditor | null>(null);
   const { theme } = useTheme();
 
-  const handleEditorDidMount = (editor: MonacoDiffEditorType) => {
+  const handleEditorDidMount = (editor: MonacoDiffEditor) => {
     editorRef.current = editor;
   };
 
@@ -64,7 +64,7 @@ export const DiffEditor = ({ className = '' }: DiffEditorProps) => {
       </div>
 
       {/* Diff Editor */}
-      <MonacoDiffEditor
+      <DiffEditor
         wrapperProps={{
           className: 'flex-1',
         }}

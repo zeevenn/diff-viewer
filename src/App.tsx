@@ -1,14 +1,19 @@
+import { BrowserRouter, Routes, Route } from 'react-router';
 import { Layout } from "./components/layout";
-import { DiffEditor } from "./components/DiffEditor";
+import { TextDiff } from "./pages";
 import { useDynamicFavicon } from "./hooks/useDynamicFavicon";
 
 function App() {
   useDynamicFavicon();
 
   return (
-    <Layout>
-      <DiffEditor />
-    </Layout>
+    <BrowserRouter>
+      <Layout>
+        <Routes>
+          <Route path="/" element={<TextDiff />} />
+        </Routes>
+      </Layout>
+    </BrowserRouter>
   );
 }
 
