@@ -1,11 +1,12 @@
-import { BrowserRouter, Routes, Route } from 'react-router';
-import { Layout } from "./components/layout";
-import { TextDiff } from "./pages";
-import { useDynamicFavicon } from "./hooks/useDynamicFavicon";
-import { ComingSoon, NotFound } from './components/ui';
+import { BrowserRouter, Route, Routes } from 'react-router'
+
+import { Layout } from './components/layout'
+import { ComingSoon, NotFound } from './components/ui'
+import { useDynamicFavicon } from './hooks/useDynamicFavicon'
+import { TextDiff } from './pages'
 
 function App() {
-  useDynamicFavicon();
+  useDynamicFavicon()
 
   return (
     <BrowserRouter>
@@ -17,7 +18,7 @@ function App() {
         </Routes>
       </Layout>
     </BrowserRouter>
-  );
+  )
 }
 
-export default App;
+export default App
