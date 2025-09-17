@@ -1,1 +1,1 @@
-export { TextDiff } from './TextDiff';
+export { TextDiff } from './TextDiff'

@@ -1,15 +1,15 @@
-import { useNavigate } from "react-router";
+import { useNavigate } from 'react-router'
 
 export const NotFound = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const handleGoHome = () => {
-    navigate("/");
-  };
+    navigate('/')
+  }
 
   const handleGoBack = () => {
-    navigate(-1);
-  };
+    navigate(-1)
+  }
 
   return (
     <div className="flex-1 flex items-center justify-center bg-white dark:bg-gray-800 rounded-md shadow-lg">
@@ -80,13 +80,13 @@ export const NotFound = () => {
           </p>
           <div className="flex flex-wrap justify-center gap-3 sm:gap-4 text-sm">
             <button
-              onClick={() => navigate("/")}
+              onClick={() => navigate('/')}
               className="text-blue-600 dark:text-blue-400 hover:underline cursor-pointer"
             >
               Text Diff
             </button>
             <button
-              onClick={() => navigate("/image")}
+              onClick={() => navigate('/image')}
               className="text-blue-600 dark:text-blue-400 hover:underline cursor-pointer"
             >
               Image Diff
@@ -95,5 +95,5 @@ export const NotFound = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
