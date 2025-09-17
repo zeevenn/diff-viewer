@@ -7,6 +7,13 @@ interface TextDiffProps {
   className?: string;
 }
 
+type DropZone = 'original' | 'modified';
+
+const DROP_ZONE = {
+  ORIGINAL: 'original' as const,
+  MODIFIED: 'modified' as const,
+} satisfies Record<string, DropZone>;
+
 export const TextDiff = ({ className = '' }: TextDiffProps) => {
   const [originalText, setOriginalText] = useState('function hello() {\n  console.log("Hello World");\n}');
   const [modifiedText, setModifiedText] = useState('function hello() {\n  console.log("Hello, World!");\n  return "Hello";\n}');
@@ -15,10 +22,10 @@ export const TextDiff = ({ className = '' }: TextDiffProps) => {
   const modifiedDropZoneRef = useRef<HTMLElement | null>(null);
   const { theme } = useTheme();
 
-  const { isDragging, activeDropZone, registerDropZone } = useDragAndDrop({
+  const { isDragging, activeDropZone, registerDropZone } = useDragAndDrop<DropZone>({
     onFilesDrop: (files, dropZone) => {
       const file = files[0];
-      readFile(file, dropZone as 'original' | 'modified');
+      readFile(file, dropZone);
     },
   });
 
@@ -27,19 +34,18 @@ export const TextDiff = ({ className = '' }: TextDiffProps) => {
     originalDropZoneRef.current = editor.getOriginalEditor().getDomNode();
     modifiedDropZoneRef.current = editor.getModifiedEditor().getDomNode();
     if (originalDropZoneRef.current) {
-      registerDropZone(originalDropZoneRef.current, 'original');
+      registerDropZone(originalDropZoneRef.current, DROP_ZONE.ORIGINAL);
     }
     if (modifiedDropZoneRef.current) {
-      registerDropZone(modifiedDropZoneRef.current, 'modified');
+      registerDropZone(modifiedDropZoneRef.current, DROP_ZONE.MODIFIED);
     }
   };
 
-  const readFile = (file: File, side: 'original' | 'modified') => {
+  const readFile = (file: File, side: DropZone) => {
     const reader = new FileReader();
     reader.onload = (e) => {
       const content = e.target?.result as string;
-      console.log('content', content, 'side', side);
-      if (side === 'original') {
+      if (side === DROP_ZONE.ORIGINAL) {
         setOriginalText(content);
       } else {
         setModifiedText(content);
@@ -122,12 +128,12 @@ export const TextDiff = ({ className = '' }: TextDiffProps) => {
           <>
             <div 
               className={`absolute top-0 left-0 w-1/2 h-full pointer-events-none transition-all duration-200 ${
-                activeDropZone === 'original' 
+                activeDropZone === DROP_ZONE.ORIGINAL 
                   ? 'bg-blue-500/20 border-2 border-blue-500 border-dashed' 
                   : 'bg-gray-500/10'
               }`}
             >
-              {activeDropZone === 'original' && (
+              {activeDropZone === DROP_ZONE.ORIGINAL && (
                 <div className="flex items-center justify-center h-full">
                   <div className="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg">
                     <div className="flex items-center space-x-2">
@@ -143,12 +149,12 @@ export const TextDiff = ({ className = '' }: TextDiffProps) => {
 
             <div 
               className={`absolute top-0 right-0 w-1/2 h-full pointer-events-none transition-all duration-200 ${
-                activeDropZone === 'modified' 
+                activeDropZone === DROP_ZONE.MODIFIED 
                   ? 'bg-green-500/20 border-2 border-green-500 border-dashed' 
                   : 'bg-gray-500/10'
               }`}
             >
-              {activeDropZone === 'modified' && (
+              {activeDropZone === DROP_ZONE.MODIFIED && (
                 <div className="flex items-center justify-center h-full">
                   <div className="bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg">
                     <div className="flex items-center space-x-2">

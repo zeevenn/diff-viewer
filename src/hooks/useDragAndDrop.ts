@@ -11,11 +11,11 @@ interface HTMLElementWithDragHandlers extends HTMLElement {
   _dragHandlers?: DragHandlers;
 }
 
-interface UseDragAndDropOptions {
-  onFilesDrop?: (files: FileList, dropZone: string) => void;
-  onDragEnter?: (dropZone: string, e: DragEvent) => void;
-  onDragOver?: (dropZone: string, e: DragEvent) => void;
-  onDragLeave?: (dropZone: string, e: DragEvent) => void;
+interface UseDragAndDropOptions<T extends string> {
+  onFilesDrop?: (files: FileList, dropZone: T) => void;
+  onDragEnter?: (dropZone: T, e: DragEvent) => void;
+  onDragOver?: (dropZone: T, e: DragEvent) => void;
+  onDragLeave?: (dropZone: T, e: DragEvent) => void;
 }
 
 /**
@@ -30,14 +30,14 @@ interface UseDragAndDropOptions {
  * 
  * registerDropZone(document.getElementById('drop-zone'), 'drop-zone');
  */
-export const useDragAndDrop = (options: UseDragAndDropOptions = {}) => {
+export const useDragAndDrop = <T extends string>(options: UseDragAndDropOptions<T> = {}) => {
   const [isDragging, setIsDragging] = useState(false);
-  const [activeDropZone, setActiveDropZone] = useState<string | null>(null);
-  const dropZonesRef = useRef<Map<string, HTMLElement>>(new Map());
+  const [activeDropZone, setActiveDropZone] = useState<T | null>(null);
+  const dropZonesRef = useRef<Map<T, HTMLElement>>(new Map());
 
   const { onFilesDrop, onDragEnter, onDragOver, onDragLeave } = options;
 
-  const setupDropZone = useCallback((element: HTMLElement, zoneId: string) => {
+  const setupDropZone = useCallback((element: HTMLElement, zoneId: T) => {
     const handleDragEnter = (e: DragEvent) => {
       e.preventDefault();
       e.stopPropagation();
@@ -100,12 +100,12 @@ export const useDragAndDrop = (options: UseDragAndDropOptions = {}) => {
     }
   }, []);
 
-  const registerDropZone = useCallback((element: HTMLElement, zoneId: string) => {
+  const registerDropZone = useCallback((element: HTMLElement, zoneId: T) => {
     dropZonesRef.current.set(zoneId, element);
     setupDropZone(element, zoneId);
   }, [setupDropZone]);
 
-  const unregisterDropZone = useCallback((zoneId: string) => {
+  const unregisterDropZone = useCallback((zoneId: T) => {
     const element = dropZonesRef.current.get(zoneId);
     if (element) {
       cleanupDropZone(element as HTMLElementWithDragHandlers);
