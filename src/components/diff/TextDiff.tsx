@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import { DiffEditor, type MonacoDiffEditor } from '@monaco-editor/react';
 import { useTheme } from '../../hooks/useTheme';
 import { useDragAndDrop } from '../../hooks/useDragAndDrop';
@@ -15,7 +15,7 @@ export const TextDiff = ({ className = '' }: TextDiffProps) => {
   const modifiedDropZoneRef = useRef<HTMLElement | null>(null);
   const { theme } = useTheme();
 
-  const { isDragging, activeDropZone, registerDropZone, unregisterDropZone } = useDragAndDrop({
+  const { isDragging, activeDropZone, registerDropZone } = useDragAndDrop({
     onFilesDrop: (files, dropZone) => {
       const file = files[0];
       readFile(file, dropZone as 'original' | 'modified');
@@ -33,13 +33,6 @@ export const TextDiff = ({ className = '' }: TextDiffProps) => {
       registerDropZone(modifiedDropZoneRef.current, 'modified');
     }
   };
-
-  useEffect(() => {
-    return () => {
-      unregisterDropZone('original');
-      unregisterDropZone('modified');
-    };
-  }, [registerDropZone, unregisterDropZone]);
 
   const readFile = (file: File, side: 'original' | 'modified') => {
     const reader = new FileReader();

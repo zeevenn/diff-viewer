@@ -1,6 +1,7 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 
 interface DragHandlers {
+  handleDragEnter: (e: DragEvent) => void;
   handleDragOver: (e: DragEvent) => void;
   handleDragLeave: (e: DragEvent) => void;
   handleDrop: (e: DragEvent) => void;
@@ -12,62 +13,54 @@ interface HTMLElementWithDragHandlers extends HTMLElement {
 
 interface UseDragAndDropOptions {
   onFilesDrop?: (files: FileList, dropZone: string) => void;
-  onDragEnter?: (dropZone: string) => void;
-  onDragLeave?: () => void;
+  onDragEnter?: (dropZone: string, e: DragEvent) => void;
+  onDragOver?: (dropZone: string, e: DragEvent) => void;
+  onDragLeave?: (dropZone: string, e: DragEvent) => void;
 }
 
 /**
  * Register multiple drop zones and handle drag and drop events for them.
  * @param options - {@link UseDragAndDropOptions}.
  * @example
- * const { isDragging, activeDropZone, registerDropZone, unregisterDropZone } = useDragAndDrop({
+ * const { isDragging, activeDropZone, registerDropZone } = useDragAndDrop({
  *   onFilesDrop: (files, dropZone) => {
  *     console.log(files, dropZone);
  *   }
  * });
  * 
- * useEffect(() => {
- *   registerDropZone(document.getElementById('drop-zone'), 'drop-zone');
- *   return () => {
- *     unregisterDropZone('drop-zone');
- *   };
- * }, []);
+ * registerDropZone(document.getElementById('drop-zone'), 'drop-zone');
  */
 export const useDragAndDrop = (options: UseDragAndDropOptions = {}) => {
   const [isDragging, setIsDragging] = useState(false);
   const [activeDropZone, setActiveDropZone] = useState<string | null>(null);
   const dropZonesRef = useRef<Map<string, HTMLElement>>(new Map());
 
-  const { onFilesDrop, onDragEnter, onDragLeave } = options;
+  const { onFilesDrop, onDragEnter, onDragOver, onDragLeave } = options;
 
   const setupDropZone = useCallback((element: HTMLElement, zoneId: string) => {
-    console.log('setupDropZone', element, zoneId);
-    
+    const handleDragEnter = (e: DragEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      setIsDragging(true);
+      setActiveDropZone(zoneId);
+      onDragEnter?.(zoneId, e);
+    };
+
+    // must update drag state in drag over, otherwise async event will trigger wrong state
     const handleDragOver = (e: DragEvent) => {
       e.preventDefault();
       e.stopPropagation();
-      
-      if (!isDragging) {
-        setIsDragging(true);
-        setActiveDropZone(zoneId);
-        onDragEnter?.(zoneId);
-      }
+      setIsDragging(true);
+      setActiveDropZone(zoneId);
+      onDragOver?.(zoneId, e);
     };
 
     const handleDragLeave = (e: DragEvent) => {
       e.preventDefault();
       e.stopPropagation();
-      
-      // check if the drag event really left the drag zone
-      const rect = element.getBoundingClientRect();
-      const x = e.clientX;
-      const y = e.clientY;
-      
-      if (x < rect.left || x > rect.right || y < rect.top || y > rect.bottom) {
-        setIsDragging(false);
-        setActiveDropZone(null);
-        onDragLeave?.();
-      }
+      setIsDragging(false);
+      setActiveDropZone(null);
+      onDragLeave?.(zoneId, e);
     };
 
     const handleDrop = (e: DragEvent) => {
@@ -82,21 +75,24 @@ export const useDragAndDrop = (options: UseDragAndDropOptions = {}) => {
       }
     };
 
+    element.addEventListener('dragenter', handleDragEnter);
     element.addEventListener('dragover', handleDragOver);
     element.addEventListener('dragleave', handleDragLeave);
     element.addEventListener('drop', handleDrop);
 
     // store the event handlers for cleanup
     (element as HTMLElementWithDragHandlers)._dragHandlers = {
+      handleDragEnter,
       handleDragOver,
       handleDragLeave,
       handleDrop
     };
-  }, [isDragging, onFilesDrop, onDragEnter, onDragLeave]);
+  }, [onFilesDrop, onDragEnter, onDragOver, onDragLeave]);
 
   const cleanupDropZone = useCallback((element: HTMLElementWithDragHandlers) => {
     const handlers = element._dragHandlers;
     if (handlers) {
+      element.removeEventListener('dragenter', handlers.handleDragEnter);
       element.removeEventListener('dragover', handlers.handleDragOver);
       element.removeEventListener('dragleave', handlers.handleDragLeave);
       element.removeEventListener('drop', handlers.handleDrop);
@@ -122,17 +118,16 @@ export const useDragAndDrop = (options: UseDragAndDropOptions = {}) => {
     const dropZones = dropZonesRef.current;
 
     return () => {
-      dropZones.forEach((element) => {
-        cleanupDropZone(element as HTMLElementWithDragHandlers);
+      dropZones.forEach((_, zoneId) => {
+        unregisterDropZone(zoneId);
       });
       dropZones.clear();
     };
-  }, [cleanupDropZone]);
+  }, [unregisterDropZone]);
 
   return {
     isDragging,
     activeDropZone,
     registerDropZone,
-    unregisterDropZone,
   };
 };
