@@ -1,9 +1,19 @@
 {
   "name": "diff-viewer",
-  "private": true,
-  "version": "0.0.0",
-  "description": "A simple real-time diff viewer including text, image, folder and so on diff.",
   "type": "module",
+  "version": "0.0.0",
+  "private": true,
+  "packageManager": "pnpm@10.15.1",
+  "description": "A simple real-time diff viewer including text, image, folder and so on diff.",
+  "author": "Ziven <contact@ziven.me>",
+  "license": "MIT",
+  "keywords": [
+    "diff",
+    "viewer",
+    "text",
+    "image",
+    "folder"
+  ],
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
@@ -13,16 +23,6 @@
     "inspector": "pnpx node-modules-inspector",
     "prepare": "simple-git-hooks"
   },
-  "keywords": [
-    "diff",
-    "viewer",
-    "text",
-    "image",
-    "folder"
-  ],
-  "author": "Ziven <contact@ziven.me>",
-  "license": "MIT",
-  "packageManager": "pnpm@10.15.1",
   "dependencies": {
     "@monaco-editor/react": "4.7.0-rc.0",
     "@tailwindcss/vite": "^4.1.13",
@@ -32,17 +32,16 @@
     "tailwindcss": "^4.1.13"
   },
   "devDependencies": {
-    "@eslint/js": "^9.33.0",
+    "@eslint-react/eslint-plugin": "1.53.1",
     "@types/lodash": "^4.17.20",
     "@types/react": "^19.1.10",
     "@types/react-dom": "^19.1.7",
     "@vitejs/plugin-react": "^5.0.0",
-    "eslint": "^9.33.0",
-    "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-perfectionist": "^4.15.0",
-    "eslint-plugin-prettier": "^5.5.4",
+    "@zeevenn/eslint-config": "^0.2.2",
+    "eslint": "^9.36.0",
+    "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^5.2.0",
-    "eslint-plugin-react-refresh": "^0.4.20",
+    "eslint-plugin-react-refresh": "^0.4.22",
     "globals": "^16.3.0",
     "lint-staged": "^16.1.6",
     "prettier": "^3.6.2",

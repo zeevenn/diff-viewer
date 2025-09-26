@@ -2,7 +2,7 @@ interface FooterProps {
   className?: string
 }
 
-export const Footer = ({ className = '' }: FooterProps) => {
+export function Footer({ className = '' }: FooterProps) {
   return (
     <footer
       className={`bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 ${className}`}

@@ -6,7 +6,7 @@ interface HeaderProps {
   className?: string
 }
 
-export const Header = ({ className = '' }: HeaderProps) => {
+export function Header({ className = '' }: HeaderProps) {
   return (
     <header
       className={`bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 shadow-sm ${className}`}

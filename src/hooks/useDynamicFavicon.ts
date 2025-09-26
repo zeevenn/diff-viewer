@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 
-export const useDynamicFavicon = () => {
+export function useDynamicFavicon() {
   useEffect(() => {
     const updateFavicon = () => {
       const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches

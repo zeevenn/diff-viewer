@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 
-export interface DividerProps {
+interface DividerProps {
   className?: string
   type?: 'horizontal' | 'vertical'
   orientation?: 'left' | 'center' | 'right'
@@ -10,7 +10,7 @@ export interface DividerProps {
   plain?: boolean
 }
 
-export const Divider = ({
+export function Divider({
   className = '',
   type = 'horizontal',
   orientation = 'center',
@@ -18,7 +18,7 @@ export const Divider = ({
   dashed = false,
   children,
   plain = false,
-}: DividerProps) => {
+}: DividerProps) {
   const isVertical = type === 'vertical'
   const hasChildren = !!children
 

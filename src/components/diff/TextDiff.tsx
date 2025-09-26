@@ -1,4 +1,5 @@
-import { DiffEditor, type MonacoDiffEditor } from '@monaco-editor/react'
+import type { MonacoDiffEditor } from '@monaco-editor/react'
+import { DiffEditor } from '@monaco-editor/react'
 import { useRef, useState } from 'react'
 
 import { useDragAndDrop } from '../../hooks/useDragAndDrop'
@@ -15,7 +16,7 @@ const DROP_ZONE = {
   MODIFIED: 'modified' as const,
 } satisfies Record<string, DropZone>
 
-export const TextDiff = ({ className = '' }: TextDiffProps) => {
+export function TextDiff({ className = '' }: TextDiffProps) {
   const [originalText, setOriginalText] = useState(
     'function hello() {\n  console.log("Hello World");\n}',
   )
@@ -26,6 +27,19 @@ export const TextDiff = ({ className = '' }: TextDiffProps) => {
   const originalDropZoneRef = useRef<HTMLElement | null>(null)
   const modifiedDropZoneRef = useRef<HTMLElement | null>(null)
   const { theme } = useTheme()
+
+  const readFile = (file: File, side: DropZone) => {
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      const content = e.target?.result as string
+      if (side === DROP_ZONE.ORIGINAL) {
+        setOriginalText(content)
+      } else {
+        setModifiedText(content)
+      }
+    }
+    reader.readAsText(file)
+  }
 
   const { isDragging, activeDropZone, registerDropZone } =
     useDragAndDrop<DropZone>({
@@ -45,19 +59,6 @@ export const TextDiff = ({ className = '' }: TextDiffProps) => {
     if (modifiedDropZoneRef.current) {
       registerDropZone(modifiedDropZoneRef.current, DROP_ZONE.MODIFIED)
     }
-  }
-
-  const readFile = (file: File, side: DropZone) => {
-    const reader = new FileReader()
-    reader.onload = (e) => {
-      const content = e.target?.result as string
-      if (side === DROP_ZONE.ORIGINAL) {
-        setOriginalText(content)
-      } else {
-        setModifiedText(content)
-      }
-    }
-    reader.readAsText(file)
   }
 
   const refreshEditor = () => {
@@ -100,12 +101,14 @@ export const TextDiff = ({ className = '' }: TextDiffProps) => {
 
         <div className="flex items-center space-x-2">
           <button
+            type="button"
             onClick={loadSampleData}
             className="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded-md cursor-pointer transition-colors"
           >
             Load Sample
           </button>
           <button
+            type="button"
             onClick={clearContent}
             className="px-3 py-1 bg-gray-500 hover:bg-gray-600 text-white text-sm rounded-md cursor-pointer transition-colors"
           >

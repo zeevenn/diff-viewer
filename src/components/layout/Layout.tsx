@@ -8,7 +8,7 @@ interface LayoutProps {
   className?: string
 }
 
-export const Layout = ({ children, className = '' }: LayoutProps) => {
+export function Layout({ children, className = '' }: LayoutProps) {
   return (
     <div
       className={`min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900 transition-colors ${className}`}

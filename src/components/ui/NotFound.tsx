@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router'
 
-export const NotFound = () => {
+export function NotFound() {
   const navigate = useNavigate()
 
   const handleGoHome = () => {
@@ -33,6 +33,7 @@ export const NotFound = () => {
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row gap-3 justify-center max-w-xs sm:max-w-none mx-auto">
           <button
+            type="button"
             onClick={handleGoHome}
             className="flex-1 sm:flex-none px-4 py-2.5 sm:px-6 sm:py-3 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-medium rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 cursor-pointer touch-manipulation min-h-[44px] sm:min-h-[48px]"
           >
@@ -53,6 +54,7 @@ export const NotFound = () => {
           </button>
 
           <button
+            type="button"
             onClick={handleGoBack}
             className="flex-1 sm:flex-none px-4 py-2.5 sm:px-6 sm:py-3 bg-gray-500 hover:bg-gray-600 active:bg-gray-700 text-white font-medium rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 cursor-pointer touch-manipulation min-h-[44px] sm:min-h-[48px]"
           >
@@ -80,12 +82,14 @@ export const NotFound = () => {
           </p>
           <div className="flex flex-wrap justify-center gap-3 sm:gap-4 text-sm">
             <button
+              type="button"
               onClick={() => navigate('/')}
               className="text-blue-600 dark:text-blue-400 hover:underline cursor-pointer"
             >
               Text Diff
             </button>
             <button
+              type="button"
               onClick={() => navigate('/image')}
               className="text-blue-600 dark:text-blue-400 hover:underline cursor-pointer"
             >

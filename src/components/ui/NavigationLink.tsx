@@ -6,11 +6,11 @@ interface NavigationLinkProps {
   className?: string
 }
 
-export const NavigationLink = ({
+export function NavigationLink({
   to,
   children,
   className = '',
-}: NavigationLinkProps) => {
+}: NavigationLinkProps) {
   const location = useLocation()
   const isActive = (path: string) => location.pathname === path
 

@@ -6,11 +6,11 @@ interface ComingSoonProps {
   className?: string
 }
 
-export const ComingSoon = ({
+export function ComingSoon({
   title = 'Coming Soon',
   description = 'This feature is under development and will be available soon.',
   className = '',
-}: ComingSoonProps) => {
+}: ComingSoonProps) {
   return (
     <div
       className={`flex-1 flex items-center justify-center bg-white dark:bg-gray-800 rounded-md shadow-lg ${className}`}
