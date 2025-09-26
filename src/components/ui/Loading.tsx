@@ -1,4 +1,4 @@
-export const Loading = () => {
+export function Loading() {
   return (
     <div className="flex space-x-1">
       <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>

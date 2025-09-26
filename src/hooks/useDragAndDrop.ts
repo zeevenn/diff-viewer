@@ -30,9 +30,9 @@ interface UseDragAndDropOptions<T extends string> {
  *
  * registerDropZone(document.getElementById('drop-zone'), 'drop-zone');
  */
-export const useDragAndDrop = <T extends string>(
+export function useDragAndDrop<T extends string>(
   options: UseDragAndDropOptions<T> = {},
-) => {
+) {
   const [isDragging, setIsDragging] = useState(false)
   const [activeDropZone, setActiveDropZone] = useState<T | null>(null)
   const dropZonesRef = useRef<Map<T, HTMLElement>>(new Map())
