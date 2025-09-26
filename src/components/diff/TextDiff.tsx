@@ -28,10 +28,21 @@ export function TextDiff({ className = '' }: TextDiffProps) {
   const modifiedDropZoneRef = useRef<HTMLElement | null>(null)
   const { theme } = useTheme()
 
+  const formatContentIfJSON = (content: string): string => {
+    try {
+      const formatted = JSON.stringify(JSON.parse(content), null, 2)
+      return formatted
+    } catch {
+      return content
+    }
+  }
+
   const readFile = (file: File, side: DropZone) => {
     const reader = new FileReader()
     reader.onload = (e) => {
-      const content = e.target?.result as string
+      const rawContent = e.target?.result as string
+      const content = formatContentIfJSON(rawContent)
+
       if (side === DROP_ZONE.ORIGINAL) {
         setOriginalText(content)
       } else {
@@ -53,12 +64,34 @@ export function TextDiff({ className = '' }: TextDiffProps) {
     editorRef.current = editor
     originalDropZoneRef.current = editor.getOriginalEditor().getDomNode()
     modifiedDropZoneRef.current = editor.getModifiedEditor().getDomNode()
+
     if (originalDropZoneRef.current) {
       registerDropZone(originalDropZoneRef.current, DROP_ZONE.ORIGINAL)
     }
     if (modifiedDropZoneRef.current) {
       registerDropZone(modifiedDropZoneRef.current, DROP_ZONE.MODIFIED)
     }
+
+    const originalEditor = editor.getOriginalEditor()
+    const modifiedEditor = editor.getModifiedEditor()
+
+    originalEditor.onDidPaste(() => {
+      const content = originalEditor.getValue()
+      const formattedContent = formatContentIfJSON(content)
+      if (content !== formattedContent) {
+        originalEditor.setValue(formattedContent)
+        setOriginalText(formattedContent)
+      }
+    })
+
+    modifiedEditor.onDidPaste(() => {
+      const content = modifiedEditor.getValue()
+      const formattedContent = formatContentIfJSON(content)
+      if (content !== formattedContent) {
+        modifiedEditor.setValue(formattedContent)
+        setModifiedText(formattedContent)
+      }
+    })
   }
 
   const refreshEditor = () => {
