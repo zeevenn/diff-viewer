@@ -5,13 +5,13 @@ A simple real-time diff viewer including text, image, folder and so on diff.
 ## ✨ Features
 
 - [x] **Text Diff**: Side-by-side comparison of two text snippets in real-time
-- [ ] **Image Diff**: Compare two images
+- [x] **Image Diff**: Compare two images, including side-by-side, overlay and slider mode
 - [ ] **Folder Diff**: Compare two folders
 - [ ] ......
 
 ## 🚀 Live Demo
 
-Visit the live demo at: [diff-viewer.ziven.me](https://diff-viewer.ziven.me)
+Visit the live demo at: [diff.ziven.me](https://diff.ziven.me)
 
 ### Local Development
 
