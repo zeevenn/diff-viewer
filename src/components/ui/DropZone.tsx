@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 import type { FileValidation, ValidationResult } from '../../utils'
 
-import { createContext, useCallback, useEffect, useMemo, useRef } from 'react'
+import { createContext, useCallback, useMemo, useRef } from 'react'
 import { useDropZone } from '../../context/useDropZone'
 import { useDragAndDrop } from '../../hooks/useDragAndDrop'
 import { validateFiles } from '../../utils'
@@ -9,14 +9,12 @@ import { DragIndicator, DragOverlay } from './DragOverlay'
 
 interface DragState {
   isDragging: boolean
-  isActive: boolean
   validationResult: ValidationResult
 }
 
 interface DropZoneContextValue {
   dragState: DragState
   onFileSelect: (files: FileList) => void
-  registerDropZone: (element: HTMLElement) => void
 }
 
 const DropZoneContext = createContext<DropZoneContextValue | null>(null)
@@ -42,18 +40,17 @@ export function DropZone({
 }: DropZoneProps) {
   const dropZoneRef = useRef<HTMLDivElement>(null)
 
-  const { isDragging, activeDropZone, registerDropZone } =
-    useDragAndDrop<'main'>({
-      onFilesDrop: (files) => {
-        if (disabled) return
+  const { isDragging } = useDragAndDrop(dropZoneRef, {
+    onFilesDrop: (files) => {
+      if (disabled) return
 
-        const validationResult = validateFiles(files, validation)
-        onFilesSelect(files, validationResult)
-      },
-      onDragEnter: () => {},
-      onDragOver: () => {},
-      onDragLeave: () => {},
-    })
+      const validationResult = validateFiles(files, validation)
+      onFilesSelect(files, validationResult)
+    },
+    onDragEnter: () => {},
+    onDragOver: () => {},
+    onDragLeave: () => {},
+  })
 
   const handleFileSelect = useCallback(
     (files: FileList) => {
@@ -65,36 +62,21 @@ export function DropZone({
     [disabled, validation, onFilesSelect],
   )
 
-  const handleRegisterDropZone = useCallback(
-    (element: HTMLElement) => {
-      registerDropZone(element, 'main')
-    },
-    [registerDropZone],
-  )
-
   const dragState: DragState = useMemo(
     () => ({
       isDragging,
-      isActive: activeDropZone === 'main',
       validationResult: { isValid: true, errors: [] },
     }),
-    [isDragging, activeDropZone],
+    [isDragging],
   )
 
   const contextValue: DropZoneContextValue = useMemo(
     () => ({
       dragState,
       onFileSelect: handleFileSelect,
-      registerDropZone: handleRegisterDropZone,
     }),
-    [dragState, handleFileSelect, handleRegisterDropZone],
+    [dragState, handleFileSelect],
   )
-
-  useEffect(() => {
-    if (dropZoneRef.current) {
-      handleRegisterDropZone(dropZoneRef.current)
-    }
-  }, [handleRegisterDropZone])
 
   return (
     <DropZoneContext value={contextValue}>

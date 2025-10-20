@@ -53,13 +53,25 @@ export function TextDiff({ className = '' }: TextDiffProps) {
     reader.readAsText(file)
   }
 
-  const { isDragging, activeDropZone, registerDropZone } =
-    useDragAndDrop<DropZone>({
-      onFilesDrop: (files, dropZone) => {
-        const file = files[0]
-        readFile(file, dropZone)
-      },
-    })
+  const {
+    isDragging: isOriginalDragging,
+    registerDropZone: registerOriginalDropZone,
+  } = useDragAndDrop(null, {
+    onFilesDrop: (files) => {
+      const file = files[0]
+      readFile(file, DROP_ZONE.ORIGINAL)
+    },
+  })
+
+  const {
+    isDragging: isModifiedDragging,
+    registerDropZone: registerModifiedDropZone,
+  } = useDragAndDrop(null, {
+    onFilesDrop: (files) => {
+      const file = files[0]
+      readFile(file, DROP_ZONE.MODIFIED)
+    },
+  })
 
   const handleEditorDidMount = (editor: MonacoDiffEditor) => {
     editorRef.current = editor
@@ -67,10 +79,10 @@ export function TextDiff({ className = '' }: TextDiffProps) {
     modifiedDropZoneRef.current = editor.getModifiedEditor().getDomNode()
 
     if (originalDropZoneRef.current) {
-      registerDropZone(originalDropZoneRef.current, DROP_ZONE.ORIGINAL)
+      registerOriginalDropZone(originalDropZoneRef.current)
     }
     if (modifiedDropZoneRef.current) {
-      registerDropZone(modifiedDropZoneRef.current, DROP_ZONE.MODIFIED)
+      registerModifiedDropZone(modifiedDropZoneRef.current)
     }
 
     const originalEditor = editor.getOriginalEditor()
@@ -175,7 +187,7 @@ export function TextDiff({ className = '' }: TextDiffProps) {
         />
 
         <DragOverlay
-          isDragging={isDragging && activeDropZone === DROP_ZONE.ORIGINAL}
+          isDragging={isOriginalDragging}
           position="left"
           className="bg-blue-500/20 border-2 border-blue-500 border-dashed"
         >
@@ -185,7 +197,7 @@ export function TextDiff({ className = '' }: TextDiffProps) {
         </DragOverlay>
 
         <DragOverlay
-          isDragging={isDragging && activeDropZone === DROP_ZONE.MODIFIED}
+          isDragging={isModifiedDragging}
           position="right"
           className="bg-green-500/20 border-2 border-green-500 border-dashed"
         >
