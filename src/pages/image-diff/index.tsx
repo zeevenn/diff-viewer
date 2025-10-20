@@ -3,10 +3,6 @@ import { useState } from 'react'
 import { ComingSoon } from '../../components/ui'
 import { OverlayView, SideBySideView, SliderView } from './components'
 
-interface ImageDiffProps {
-  className?: string
-}
-
 type ComparisonMode = 'side-by-side' | 'overlay' | 'slider' | 'difference'
 
 const COMPARISON_MODES = {
@@ -16,7 +12,7 @@ const COMPARISON_MODES = {
   DIFFERENCE: 'difference' as const,
 } satisfies Record<string, ComparisonMode>
 
-export function ImageDiff({ className = '' }: ImageDiffProps) {
+export function ImageDiff() {
   const [originalImage, setOriginalImage] = useState<string | null>(null)
   const [modifiedImage, setModifiedImage] = useState<string | null>(null)
   const [originalImageInfo, setOriginalImageInfo] = useState<{
@@ -149,9 +145,7 @@ export function ImageDiff({ className = '' }: ImageDiffProps) {
   }
 
   return (
-    <div
-      className={`flex-1 flex flex-col bg-white dark:bg-gray-800 rounded-lg shadow-lg ${className}`}
-    >
+    <>
       {/* Toolbar */}
       {originalImageInfo && modifiedImageInfo && (
         <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
@@ -208,6 +202,6 @@ export function ImageDiff({ className = '' }: ImageDiffProps) {
 
       {/* Image Comparison Area */}
       <div className="flex-1 flex flex-col relative">{renderCurrentView()}</div>
-    </div>
+    </>
   )
 }

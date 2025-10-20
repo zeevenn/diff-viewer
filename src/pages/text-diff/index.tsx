@@ -6,10 +6,6 @@ import { DragIndicator, DragOverlay } from '../../components/ui'
 import { useDragAndDrop } from '../../hooks/useDragAndDrop'
 import { useTheme } from '../../hooks/useTheme'
 
-interface TextDiffProps {
-  className?: string
-}
-
 type DropZone = 'original' | 'modified'
 
 const DROP_ZONE = {
@@ -17,7 +13,7 @@ const DROP_ZONE = {
   MODIFIED: 'modified' as const,
 } satisfies Record<string, DropZone>
 
-export function TextDiff({ className = '' }: TextDiffProps) {
+export function TextDiff() {
   const [originalText, setOriginalText] = useState(
     'function hello() {\n  console.log("Hello World");\n}',
   )
@@ -135,9 +131,7 @@ export function TextDiff({ className = '' }: TextDiffProps) {
   }
 
   return (
-    <div
-      className={`flex-1 flex flex-col bg-white dark:bg-gray-800 rounded-lg shadow-lg ${className}`}
-    >
+    <>
       {/* Toolbar */}
       <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
         <div className="flex items-center space-x-4 text-xs text-gray-500 dark:text-gray-400">
@@ -206,6 +200,6 @@ export function TextDiff({ className = '' }: TextDiffProps) {
           </DragIndicator>
         </DragOverlay>
       </div>
-    </div>
+    </>
   )
 }
