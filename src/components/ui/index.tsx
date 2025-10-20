@@ -1,5 +1,7 @@
 export { ComingSoon } from './ComingSoon'
 export { Divider } from './Divider'
+export { DragIndicator, DragOverlay } from './DragOverlay'
+export { DropZone } from './DropZone'
 export { Loading } from './Loading'
 export { Logo } from './Logo'
 export { NavigationLink } from './NavigationLink'

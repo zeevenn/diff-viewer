@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import type React from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 interface DragHandlers {
   handleDragEnter: (e: DragEvent) => void
@@ -11,70 +12,69 @@ interface HTMLElementWithDragHandlers extends HTMLElement {
   _dragHandlers?: DragHandlers
 }
 
-interface UseDragAndDropOptions<T extends string> {
-  onFilesDrop?: (files: FileList, dropZone: T) => void
-  onDragEnter?: (dropZone: T, e: DragEvent) => void
-  onDragOver?: (dropZone: T, e: DragEvent) => void
-  onDragLeave?: (dropZone: T, e: DragEvent) => void
+interface UseDragAndDropOptions {
+  onFilesDrop?: (files: FileList, e: DragEvent) => void
+  onDragEnter?: (e: DragEvent) => void
+  onDragOver?: (e: DragEvent) => void
+  onDragLeave?: (e: DragEvent) => void
 }
 
 /**
- * Register multiple drop zones and handle drag and drop events for them.
+ * Handle drag and drop events for a single drop zone.
+ * @param targetRef - RefObject<HTMLElement> pass it will auto register event
  * @param options - {@link UseDragAndDropOptions}.
  * @example
- * const { isDragging, activeDropZone, registerDropZone } = useDragAndDrop({
- *   onFilesDrop: (files, dropZone) => {
- *     console.log(files, dropZone);
+ * const dropZoneRef = useRef<HTMLElement>(null)
+ * const { isDragging } = useDragAndDrop(dropZoneRef, {
+ *   onFilesDrop: (files, e) => {
+ *     console.log(files, e);
  *   }
- * });
- *
- * registerDropZone(document.getElementById('drop-zone'), 'drop-zone');
+ * })
  */
-export function useDragAndDrop<T extends string>(
-  options: UseDragAndDropOptions<T> = {},
+export function useDragAndDrop(
+  targetRef: React.RefObject<HTMLElement | null> | null,
+  options: UseDragAndDropOptions = {},
 ) {
   const [isDragging, setIsDragging] = useState(false)
-  const [activeDropZone, setActiveDropZone] = useState<T | null>(null)
-  const dropZonesRef = useRef<Map<T, HTMLElement>>(new Map())
 
   const { onFilesDrop, onDragEnter, onDragOver, onDragLeave } = options
 
+  const handleSetDragging = useCallback((dragging: boolean) => {
+    setIsDragging(dragging)
+  }, [])
+
   const setupDropZone = useCallback(
-    (element: HTMLElement, zoneId: T) => {
+    (element: HTMLElement) => {
       const handleDragEnter = (e: DragEvent) => {
         e.preventDefault()
         e.stopPropagation()
-        setIsDragging(true)
-        setActiveDropZone(zoneId)
-        onDragEnter?.(zoneId, e)
+        handleSetDragging(true)
+        onDragEnter?.(e)
       }
 
       // must update drag state in drag over, otherwise async event will trigger wrong state
       const handleDragOver = (e: DragEvent) => {
         e.preventDefault()
         e.stopPropagation()
-        setIsDragging(true)
-        setActiveDropZone(zoneId)
-        onDragOver?.(zoneId, e)
+        handleSetDragging(true)
+        onDragOver?.(e)
       }
 
       const handleDragLeave = (e: DragEvent) => {
         e.preventDefault()
         e.stopPropagation()
-        setIsDragging(false)
-        setActiveDropZone(null)
-        onDragLeave?.(zoneId, e)
+        handleSetDragging(false)
+        onDragLeave?.(e)
       }
 
       const handleDrop = (e: DragEvent) => {
         e.preventDefault()
         e.stopPropagation()
-        setIsDragging(false)
-        setActiveDropZone(null)
+        handleSetDragging(false)
 
         const files = e.dataTransfer?.files
         if (files && files.length > 0) {
-          onFilesDrop?.(files, zoneId)
+          onFilesDrop?.(files, e)
         }
       }
 
@@ -91,7 +91,7 @@ export function useDragAndDrop<T extends string>(
         handleDrop,
       }
     },
-    [onFilesDrop, onDragEnter, onDragOver, onDragLeave],
+    [handleSetDragging, onFilesDrop, onDragEnter, onDragOver, onDragLeave],
   )
 
   const cleanupDropZone = useCallback(
@@ -108,40 +108,24 @@ export function useDragAndDrop<T extends string>(
     [],
   )
 
+  // register manually
   const registerDropZone = useCallback(
-    (element: HTMLElement, zoneId: T) => {
-      dropZonesRef.current.set(zoneId, element)
-      setupDropZone(element, zoneId)
+    (element: HTMLElement) => {
+      setupDropZone(element)
     },
     [setupDropZone],
   )
 
-  const unregisterDropZone = useCallback(
-    (zoneId: T) => {
-      const element = dropZonesRef.current.get(zoneId)
-      if (element) {
-        cleanupDropZone(element as HTMLElementWithDragHandlers)
-        dropZonesRef.current.delete(zoneId)
-      }
-    },
-    [cleanupDropZone],
-  )
-
-  // cleanup drop zones
   useEffect(() => {
-    const dropZones = dropZonesRef.current
+    const element = targetRef?.current
+    if (element) {
+      setupDropZone(element)
 
-    return () => {
-      dropZones.forEach((_, zoneId) => {
-        unregisterDropZone(zoneId)
-      })
-      dropZones.clear()
+      return () => {
+        cleanupDropZone(element as HTMLElementWithDragHandlers)
+      }
     }
-  }, [unregisterDropZone])
+  }, [targetRef, setupDropZone, cleanupDropZone])
 
-  return {
-    isDragging,
-    activeDropZone,
-    registerDropZone,
-  }
+  return { isDragging, registerDropZone }
 }

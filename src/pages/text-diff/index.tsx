@@ -2,12 +2,9 @@ import type { MonacoDiffEditor } from '@monaco-editor/react'
 import { DiffEditor } from '@monaco-editor/react'
 import { useRef, useState } from 'react'
 
+import { DragIndicator, DragOverlay } from '../../components/ui'
 import { useDragAndDrop } from '../../hooks/useDragAndDrop'
 import { useTheme } from '../../hooks/useTheme'
-
-interface TextDiffProps {
-  className?: string
-}
 
 type DropZone = 'original' | 'modified'
 
@@ -16,7 +13,7 @@ const DROP_ZONE = {
   MODIFIED: 'modified' as const,
 } satisfies Record<string, DropZone>
 
-export function TextDiff({ className = '' }: TextDiffProps) {
+export function TextDiff() {
   const [originalText, setOriginalText] = useState(
     'function hello() {\n  console.log("Hello World");\n}',
   )
@@ -52,13 +49,25 @@ export function TextDiff({ className = '' }: TextDiffProps) {
     reader.readAsText(file)
   }
 
-  const { isDragging, activeDropZone, registerDropZone } =
-    useDragAndDrop<DropZone>({
-      onFilesDrop: (files, dropZone) => {
-        const file = files[0]
-        readFile(file, dropZone)
-      },
-    })
+  const {
+    isDragging: isOriginalDragging,
+    registerDropZone: registerOriginalDropZone,
+  } = useDragAndDrop(null, {
+    onFilesDrop: (files) => {
+      const file = files[0]
+      readFile(file, DROP_ZONE.ORIGINAL)
+    },
+  })
+
+  const {
+    isDragging: isModifiedDragging,
+    registerDropZone: registerModifiedDropZone,
+  } = useDragAndDrop(null, {
+    onFilesDrop: (files) => {
+      const file = files[0]
+      readFile(file, DROP_ZONE.MODIFIED)
+    },
+  })
 
   const handleEditorDidMount = (editor: MonacoDiffEditor) => {
     editorRef.current = editor
@@ -66,10 +75,10 @@ export function TextDiff({ className = '' }: TextDiffProps) {
     modifiedDropZoneRef.current = editor.getModifiedEditor().getDomNode()
 
     if (originalDropZoneRef.current) {
-      registerDropZone(originalDropZoneRef.current, DROP_ZONE.ORIGINAL)
+      registerOriginalDropZone(originalDropZoneRef.current)
     }
     if (modifiedDropZoneRef.current) {
-      registerDropZone(modifiedDropZoneRef.current, DROP_ZONE.MODIFIED)
+      registerModifiedDropZone(modifiedDropZoneRef.current)
     }
 
     const originalEditor = editor.getOriginalEditor()
@@ -122,9 +131,7 @@ export function TextDiff({ className = '' }: TextDiffProps) {
   }
 
   return (
-    <div
-      className={`flex-1 flex flex-col bg-white dark:bg-gray-800 rounded-lg shadow-lg ${className}`}
-    >
+    <div className="flex-1 flex flex-col bg-white dark:bg-gray-800 rounded-lg shadow-lg">
       {/* Toolbar */}
       <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
         <div className="flex items-center space-x-4 text-xs text-gray-500 dark:text-gray-400">
@@ -173,71 +180,25 @@ export function TextDiff({ className = '' }: TextDiffProps) {
           }}
         />
 
-        {isDragging && (
-          <>
-            <div
-              className={`absolute top-0 left-0 w-1/2 h-full pointer-events-none transition-all duration-200 ${
-                activeDropZone === DROP_ZONE.ORIGINAL
-                  ? 'bg-blue-500/20 border-2 border-blue-500 border-dashed'
-                  : 'bg-gray-500/10'
-              }`}
-            >
-              {activeDropZone === DROP_ZONE.ORIGINAL && (
-                <div className="flex items-center justify-center h-full">
-                  <div className="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg">
-                    <div className="flex items-center space-x-2">
-                      <svg
-                        className="w-5 h-5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"
-                        />
-                      </svg>
-                      <span>Drag to update original content</span>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
+        <DragOverlay
+          isDragging={isOriginalDragging}
+          position="left"
+          className="bg-blue-500/20 border-2 border-blue-500 border-dashed"
+        >
+          <DragIndicator className="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg">
+            <span>Drag to update original content</span>
+          </DragIndicator>
+        </DragOverlay>
 
-            <div
-              className={`absolute top-0 right-0 w-1/2 h-full pointer-events-none transition-all duration-200 ${
-                activeDropZone === DROP_ZONE.MODIFIED
-                  ? 'bg-green-500/20 border-2 border-green-500 border-dashed'
-                  : 'bg-gray-500/10'
-              }`}
-            >
-              {activeDropZone === DROP_ZONE.MODIFIED && (
-                <div className="flex items-center justify-center h-full">
-                  <div className="bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg">
-                    <div className="flex items-center space-x-2">
-                      <svg
-                        className="w-5 h-5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"
-                        />
-                      </svg>
-                      <span>Drag to update modified content</span>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-          </>
-        )}
+        <DragOverlay
+          isDragging={isModifiedDragging}
+          position="right"
+          className="bg-green-500/20 border-2 border-green-500 border-dashed"
+        >
+          <DragIndicator className="bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg">
+            <span>Drag to update modified content</span>
+          </DragIndicator>
+        </DragOverlay>
       </div>
     </div>
   )
