@@ -129,7 +129,7 @@ function DropZoneInput({
   children,
 }: DropZoneInputProps) {
   const { onFileSelect } = useDropZone()
-  const inputId = `file-input-${Math.random().toString(36).substr(2, 9)}`
+  const inputId = `file-input-${Math.random().toString(36).substring(2, 9)}`
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files
@@ -141,7 +141,10 @@ function DropZoneInput({
 
   return (
     <>
-      <label htmlFor={inputId} className={`cursor-pointer ${className}`}>
+      <label
+        htmlFor={inputId}
+        className={`absolute inset-0 cursor-pointer flex items-center justify-center ${className}`}
+      >
         {children}
       </label>
       <input

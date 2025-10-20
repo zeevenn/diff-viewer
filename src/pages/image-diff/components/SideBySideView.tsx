@@ -14,80 +14,68 @@ export function SideBySideView({
   onModifiedImageSelect,
 }: SideBySideViewProps) {
   return (
-    <div className="flex-1 flex">
+    <div className="flex-1 flex gap-2">
       {/* Original Image */}
-      <div className="flex-1 flex flex-col border-r border-gray-200 dark:border-gray-700">
-        <DropZone
-          onFilesSelect={(files: FileList) => onOriginalImageSelect(files)}
-          validation={{ accept: ['image/*'], maxCount: 1 }}
-          className="flex-1"
+      <DropZone
+        onFilesSelect={(files: FileList) => onOriginalImageSelect(files)}
+        validation={{ accept: ['image/*'], maxCount: 1 }}
+        className="flex-1 bg-white dark:bg-gray-800 rounded-lg shadow-lg"
+      >
+        <DropZone.Content
+          className={`flex-1 flex items-center justify-center rounded-lg shadow-lg ${
+            !originalImage
+              ? 'border-2 border-dashed border-gray-300 dark:border-gray-600'
+              : ''
+          }`}
         >
-          <DropZone.Content
-            className={`flex-1 flex items-center justify-center ${
-              !originalImage
-                ? 'border-2 border-dashed border-gray-300 dark:border-gray-600'
-                : ''
-            }`}
-          >
-            {originalImage ? (
-              <img
-                src={originalImage}
-                alt="Original"
-                className="max-w-full max-h-full object-contain"
+          {originalImage ? (
+            <img
+              src={originalImage}
+              alt="Original"
+              className="max-w-full max-h-full object-contain"
+            />
+          ) : (
+            <DropZone.Input accept="image/*">
+              <DropZone.Message
+                title="Drop image here"
+                description="jpg, png, webp, gif, etc."
               />
-            ) : (
-              <DropZone.Input accept="image/*">
-                <DropZone.Message
-                  title="上传图片"
-                  description="或拖拽图片到此处"
-                />
-              </DropZone.Input>
-            )}
-          </DropZone.Content>
-          <DropZone.Overlay>
-            <DropZone.DragIndicator className="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg">
-              <span>拖拽更新原图</span>
-            </DropZone.DragIndicator>
-          </DropZone.Overlay>
-        </DropZone>
-      </div>
+            </DropZone.Input>
+          )}
+        </DropZone.Content>
+        <DropZone.Overlay className="rounded-lg" />
+      </DropZone>
 
       {/* Modified Image */}
-      <div className="flex-1 flex flex-col">
-        <DropZone
-          onFilesSelect={(files: FileList) => onModifiedImageSelect(files)}
-          validation={{ accept: ['image/*'], maxCount: 1 }}
-          className="flex-1"
+      <DropZone
+        onFilesSelect={(files: FileList) => onModifiedImageSelect(files)}
+        validation={{ accept: ['image/*'], maxCount: 1 }}
+        className="flex-1 bg-white dark:bg-gray-800 rounded-lg shadow-lg"
+      >
+        <DropZone.Content
+          className={`flex-1 flex items-center justify-center rounded-lg shadow-lg ${
+            !modifiedImage
+              ? 'border-2 border-dashed border-gray-300 dark:border-gray-600'
+              : ''
+          }`}
         >
-          <DropZone.Content
-            className={`flex-1 flex items-center justify-center ${
-              !modifiedImage
-                ? 'border-2 border-dashed border-gray-300 dark:border-gray-600'
-                : ''
-            }`}
-          >
-            {modifiedImage ? (
-              <img
-                src={modifiedImage}
-                alt="Modified"
-                className="max-w-full max-h-full object-contain"
+          {modifiedImage ? (
+            <img
+              src={modifiedImage}
+              alt="Modified"
+              className="max-w-full max-h-full object-contain"
+            />
+          ) : (
+            <DropZone.Input accept="image/*">
+              <DropZone.Message
+                title="Drop image here"
+                description="jpg, png, webp, gif, etc."
               />
-            ) : (
-              <DropZone.Input accept="image/*">
-                <DropZone.Message
-                  title="上传图片"
-                  description="或拖拽图片到此处"
-                />
-              </DropZone.Input>
-            )}
-          </DropZone.Content>
-          <DropZone.Overlay>
-            <DropZone.DragIndicator className="bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg">
-              <span>拖拽更新对比图</span>
-            </DropZone.DragIndicator>
-          </DropZone.Overlay>
-        </DropZone>
-      </div>
+            </DropZone.Input>
+          )}
+        </DropZone.Content>
+        <DropZone.Overlay className="rounded-lg" />
+      </DropZone>
     </div>
   )
 }

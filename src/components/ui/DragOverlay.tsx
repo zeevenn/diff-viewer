@@ -10,7 +10,7 @@ interface DragOverlayProps {
 export function DragOverlay({
   isDragging,
   position = 'full',
-  className = 'bg-blue-500/20 border-2 border-blue-500 border-dashed',
+  className = '',
   children,
 }: DragOverlayProps) {
   if (!isDragging) return null
@@ -24,6 +24,7 @@ export function DragOverlay({
   const overlayClassName = `
     ${positionClasses[position]}
     pointer-events-none transition-all duration-200 z-50
+    bg-blue-500/20 border-2 border-blue-500 border-dashed
     ${className}
   `.trim()
 
