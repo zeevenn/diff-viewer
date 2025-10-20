@@ -80,7 +80,7 @@ export function DropZone({
 
   return (
     <DropZoneContext value={contextValue}>
-      <div ref={dropZoneRef} className={`relative ${className}`}>
+      <div ref={dropZoneRef} className={`relative flex ${className}`}>
         {children}
       </div>
     </DropZoneContext>
@@ -99,20 +99,15 @@ function DropZoneContent({ children, className = '' }: DropZoneContentProps) {
 interface DropZoneOverlayProps {
   children?: ReactNode
   className?: string
-  position?: 'left' | 'right' | 'full'
 }
 
-function DropZoneOverlay({
-  children,
-  className = '',
-  position = 'full',
-}: DropZoneOverlayProps) {
+function DropZoneOverlay({ children, className = '' }: DropZoneOverlayProps) {
   const { dragState } = useDropZone()
 
   return (
     <DragOverlay
       isDragging={dragState.isDragging}
-      position={position}
+      position="full"
       className={className}
     >
       {children}

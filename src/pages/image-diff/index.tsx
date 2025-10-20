@@ -200,8 +200,7 @@ export function ImageDiff() {
         </div>
       )}
 
-      {/* Image Comparison Area */}
-      <div className="flex-1 flex flex-col relative">{renderCurrentView()}</div>
+      {renderCurrentView()}
     </>
   )
 }

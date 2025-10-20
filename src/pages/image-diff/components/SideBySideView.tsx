@@ -44,7 +44,7 @@ export function SideBySideView({
               </DropZone.Input>
             )}
           </DropZone.Content>
-          <DropZone.Overlay position="full">
+          <DropZone.Overlay>
             <DropZone.DragIndicator className="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg">
               <span>拖拽更新原图</span>
             </DropZone.DragIndicator>
@@ -81,7 +81,7 @@ export function SideBySideView({
               </DropZone.Input>
             )}
           </DropZone.Content>
-          <DropZone.Overlay position="full">
+          <DropZone.Overlay>
             <DropZone.DragIndicator className="bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg">
               <span>拖拽更新对比图</span>
             </DropZone.DragIndicator>
