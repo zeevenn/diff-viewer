@@ -2,6 +2,7 @@ import type { MonacoDiffEditor } from '@monaco-editor/react'
 import { DiffEditor } from '@monaco-editor/react'
 import { useRef, useState } from 'react'
 
+import { DragIndicator, DragOverlay } from '../components/ui/DragOverlay'
 import { useDragAndDrop } from '../hooks/useDragAndDrop'
 import { useTheme } from '../hooks/useTheme'
 
@@ -173,71 +174,25 @@ export function TextDiff({ className = '' }: TextDiffProps) {
           }}
         />
 
-        {isDragging && (
-          <>
-            <div
-              className={`absolute top-0 left-0 w-1/2 h-full pointer-events-none transition-all duration-200 ${
-                activeDropZone === DROP_ZONE.ORIGINAL
-                  ? 'bg-blue-500/20 border-2 border-blue-500 border-dashed'
-                  : 'bg-gray-500/10'
-              }`}
-            >
-              {activeDropZone === DROP_ZONE.ORIGINAL && (
-                <div className="flex items-center justify-center h-full">
-                  <div className="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg">
-                    <div className="flex items-center space-x-2">
-                      <svg
-                        className="w-5 h-5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"
-                        />
-                      </svg>
-                      <span>Drag to update original content</span>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
+        <DragOverlay
+          isDragging={isDragging && activeDropZone === DROP_ZONE.ORIGINAL}
+          position="left"
+          className="bg-blue-500/20 border-2 border-blue-500 border-dashed"
+        >
+          <DragIndicator className="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg">
+            <span>Drag to update original content</span>
+          </DragIndicator>
+        </DragOverlay>
 
-            <div
-              className={`absolute top-0 right-0 w-1/2 h-full pointer-events-none transition-all duration-200 ${
-                activeDropZone === DROP_ZONE.MODIFIED
-                  ? 'bg-green-500/20 border-2 border-green-500 border-dashed'
-                  : 'bg-gray-500/10'
-              }`}
-            >
-              {activeDropZone === DROP_ZONE.MODIFIED && (
-                <div className="flex items-center justify-center h-full">
-                  <div className="bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg">
-                    <div className="flex items-center space-x-2">
-                      <svg
-                        className="w-5 h-5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"
-                        />
-                      </svg>
-                      <span>Drag to update modified content</span>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-          </>
-        )}
+        <DragOverlay
+          isDragging={isDragging && activeDropZone === DROP_ZONE.MODIFIED}
+          position="right"
+          className="bg-green-500/20 border-2 border-green-500 border-dashed"
+        >
+          <DragIndicator className="bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg">
+            <span>Drag to update modified content</span>
+          </DragIndicator>
+        </DragOverlay>
       </div>
     </div>
   )
