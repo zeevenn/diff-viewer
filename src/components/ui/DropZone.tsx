@@ -101,7 +101,7 @@ interface DropZoneOverlayProps {
   className?: string
 }
 
-function DropZoneOverlay({ children, className = '' }: DropZoneOverlayProps) {
+function DropZoneOverlay({ children, className }: DropZoneOverlayProps) {
   const { dragState } = useDropZone()
 
   return (
