@@ -1,2 +1,2 @@
-export { ImageDiff } from './ImageDiff'
-export { TextDiff } from './TextDiff'
+export { ImageDiff } from './image-diff'
+export { TextDiff } from './text-diff'
