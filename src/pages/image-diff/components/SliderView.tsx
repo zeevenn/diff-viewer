@@ -1,3 +1,5 @@
+import { useImageContainerSize } from '../../../hooks/useImageContainerSize'
+
 interface SliderViewProps {
   originalImage: string | null
   modifiedImage: string | null
@@ -11,6 +13,11 @@ export function SliderView({
   sliderPosition,
   onPositionChange,
 }: SliderViewProps) {
+  const { containerSize, containerRef } = useImageContainerSize(
+    originalImage,
+    modifiedImage,
+  )
+
   return (
     <div className="flex-1 flex flex-col">
       <div className="flex items-center justify-center space-x-2 py-2">
@@ -23,32 +30,53 @@ export function SliderView({
           className="w-50"
         />
       </div>
-      <div className="flex-1 flex items-center justify-center relative bg-gray-100 dark:bg-gray-900 overflow-hidden">
-        {originalImage && modifiedImage ? (
-          <div className="relative">
-            <img
-              src={originalImage}
-              alt="Original"
-              className="max-w-full max-h-full object-contain"
-            />
+      <div
+        ref={containerRef}
+        className="flex-1 flex items-center justify-center relative bg-gray-100 dark:bg-gray-900 overflow-hidden"
+      >
+        {originalImage && modifiedImage && containerSize && (
+          <div
+            className="relative"
+            style={{
+              width: `${containerSize.width}px`,
+              height: `${containerSize.height}px`,
+            }}
+          >
+            {/* Original Image Container */}
             <div
-              className="absolute top-0 left-0 overflow-hidden"
-              style={{ width: `${sliderPosition}%`, height: '100%' }}
+              className="absolute inset-0"
+              style={{
+                width: `${containerSize.width}px`,
+                height: `${containerSize.height}px`,
+              }}
             >
               <img
-                src={modifiedImage}
-                alt="Modified"
-                className="max-w-full max-h-full object-contain"
+                src={originalImage}
+                alt="Original"
+                className="w-full h-full"
               />
             </div>
+            {/* Modified Image Container - positioned from right */}
             <div
-              className="absolute top-0 w-0.5 h-full bg-red-500 shadow-lg"
-              style={{ left: `${sliderPosition}%` }}
-            />
-          </div>
-        ) : (
-          <div className="text-center text-gray-500">
-            <p>请先上传两张图片以使用滑动对比功能</p>
+              className="absolute right-0 top-0 bottom-0 overflow-hidden border-l border-red-500"
+              style={{
+                width: `${100 - sliderPosition}%`,
+              }}
+            >
+              <div
+                className="absolute right-0 top-0 bottom-0"
+                style={{
+                  width: `${containerSize.width}px`,
+                  height: `${containerSize.height}px`,
+                }}
+              >
+                <img
+                  src={modifiedImage}
+                  alt="Modified"
+                  className="w-full h-full"
+                />
+              </div>
+            </div>
           </div>
         )}
       </div>
