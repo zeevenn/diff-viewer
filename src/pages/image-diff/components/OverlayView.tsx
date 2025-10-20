@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState } from 'react'
+import { useImageContainerSize } from '../../../hooks/useImageContainerSize'
 
 interface OverlayViewProps {
   originalImage: string | null
@@ -7,67 +7,16 @@ interface OverlayViewProps {
   onOpacityChange: (opacity: number) => void
 }
 
-interface ImageDimensions {
-  width: number
-  height: number
-}
-
 export function OverlayView({
   originalImage,
   modifiedImage,
   overlayOpacity,
   onOpacityChange,
 }: OverlayViewProps) {
-  const [containerSize, setContainerSize] = useState<ImageDimensions | null>(
-    null,
+  const { containerSize, containerRef } = useImageContainerSize(
+    originalImage,
+    modifiedImage,
   )
-  const containerRef = useRef<HTMLDivElement>(null)
-
-  useLayoutEffect(() => {
-    if (!originalImage || !modifiedImage) {
-      return
-    }
-
-    const loadImage = (src: string): Promise<ImageDimensions> => {
-      return new Promise((resolve) => {
-        const img = new Image()
-        img.onload = () => {
-          resolve({ width: img.naturalWidth, height: img.naturalHeight })
-        }
-        img.src = src
-      })
-    }
-
-    Promise.all([loadImage(originalImage), loadImage(modifiedImage)]).then(
-      ([img1, img2]) => {
-        const containerRect = containerRef.current?.getBoundingClientRect()
-        const maxWidth = containerRect?.width || window.innerWidth
-        const maxHeight = containerRect?.height || window.innerHeight
-
-        const maxImageWidth = Math.max(img1.width, img2.width)
-        const maxImageHeight = Math.max(img1.height, img2.height)
-        const aspectRatio = maxImageWidth / maxImageHeight
-
-        const availableWidth = maxWidth * 0.9
-        const availableHeight = maxHeight * 0.9
-
-        let width: number
-        let height: number
-
-        if (availableWidth / availableHeight > aspectRatio) {
-          // wider, use height as base
-          height = availableHeight
-          width = height * aspectRatio
-        } else {
-          // higher, use width as base
-          width = availableWidth
-          height = width / aspectRatio
-        }
-
-        setContainerSize({ width, height })
-      },
-    )
-  }, [originalImage, modifiedImage])
 
   return (
     <div className="flex-1 flex flex-col">
