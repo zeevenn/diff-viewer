@@ -153,7 +153,7 @@ export function ImageDiff() {
             {/* Comparison Mode Selector */}
             <div className="flex items-center space-x-2">
               <span className="text-sm text-gray-700 dark:text-gray-300">
-                对比模式:
+                Mode:
               </span>
               <select
                 value={comparisonMode}
@@ -163,7 +163,7 @@ export function ImageDiff() {
                 className="text-sm border border-gray-300 dark:border-gray-600 rounded-md px-2 py-1 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300"
               >
                 <option value={COMPARISON_MODES.SIDE_BY_SIDE}>
-                  Side by Side
+                  Side by side
                 </option>
                 <option value={COMPARISON_MODES.OVERLAY}>Overlay</option>
                 <option value={COMPARISON_MODES.SLIDER}>Slider</option>
@@ -175,13 +175,13 @@ export function ImageDiff() {
             <div className="flex items-center space-x-4 text-xs text-gray-500 dark:text-gray-400">
               {originalImageInfo && (
                 <span>
-                  原图: {originalImageInfo.dimensions.width}×
+                  Original: {originalImageInfo.dimensions.width}×
                   {originalImageInfo.dimensions.height}
                 </span>
               )}
               {modifiedImageInfo && (
                 <span>
-                  对比图: {modifiedImageInfo.dimensions.width}×
+                  Modified: {modifiedImageInfo.dimensions.width}×
                   {modifiedImageInfo.dimensions.height}
                 </span>
               )}
@@ -194,7 +194,7 @@ export function ImageDiff() {
               onClick={clearImages}
               className="px-3 py-1 bg-gray-500 hover:bg-gray-600 text-white text-sm rounded-md cursor-pointer transition-colors"
             >
-              清空
+              Clear
             </button>
           </div>
         </div>
