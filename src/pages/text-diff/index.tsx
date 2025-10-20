@@ -2,7 +2,7 @@ import type { MonacoDiffEditor } from '@monaco-editor/react'
 import { DiffEditor } from '@monaco-editor/react'
 import { useRef, useState } from 'react'
 
-import { DragIndicator, DragOverlay } from '../../components/ui/DragOverlay'
+import { DragIndicator, DragOverlay } from '../../components/ui'
 import { useDragAndDrop } from '../../hooks/useDragAndDrop'
 import { useTheme } from '../../hooks/useTheme'
 
