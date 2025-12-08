@@ -4,15 +4,14 @@
   "version": "0.0.0",
   "private": true,
   "packageManager": "pnpm@10.15.1",
-  "description": "A simple real-time diff viewer including text, image, folder and so on diff.",
+  "description": "A simple real-time diff viewer including text and image",
   "author": "Ziven <contact@ziven.me>",
   "license": "MIT",
   "keywords": [
     "diff",
     "viewer",
     "text",
-    "image",
-    "folder"
+    "image"
   ],
   "scripts": {
     "dev": "vite",

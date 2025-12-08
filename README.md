@@ -1,13 +1,11 @@
 # Diff Viewer
 
-A simple real-time diff viewer including text, image, folder and so on diff.
+A simple real-time diff viewer including text and image.
 
 ## ✨ Features
 
 - [x] **Text Diff**: Side-by-side comparison of two text snippets in real-time
 - [x] **Image Diff**: Compare two images, including side-by-side, overlay and slider mode
-- [ ] **Folder Diff**: Compare two folders
-- [ ] ......
 
 ## 🚀 Live Demo
 
