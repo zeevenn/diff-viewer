@@ -3,8 +3,8 @@ import { BrowserRouter, Route, Routes } from 'react-router'
 import { Toaster } from 'sonner'
 import { Layout } from './components/layout'
 import { NotFound } from './components/ui'
-import { useDynamicFavicon } from './hooks/useDynamicFavicon'
-import { useTheme } from './hooks/useTheme'
+import { useDynamicFavicon } from './hooks/use-dynamic-favicon'
+import { useTheme } from './hooks/use-theme'
 import { ImageDiff, TextDiff } from './pages'
 
 function App() {

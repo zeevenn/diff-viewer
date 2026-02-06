@@ -1,4 +1,4 @@
-import { Loading } from './Loading'
+import { Loading } from './loading'
 
 interface ComingSoonProps {
   title?: string
