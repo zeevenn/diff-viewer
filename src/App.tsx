@@ -1,9 +1,8 @@
 import { BrowserRouter, Route, Routes } from 'react-router'
 
 import { Toaster } from 'sonner'
+import { ComingSoon, NotFound } from './components/common'
 import { Layout } from './components/layout'
-import { ComingSoon } from './components/ui/coming-soon'
-import { NotFound } from './components/ui/not-found'
 import { useDynamicFavicon } from './hooks/use-dynamic-favicon'
 import { useTheme } from './hooks/use-theme'
 import { ImageDiff, TextDiff } from './pages'

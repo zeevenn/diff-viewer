@@ -28,7 +28,6 @@ Visit the live demo at: [diff.ziven.me](https://diff.ziven.me)
    ```bash
    pnpm dev
    ```
-
 4. **Open your browser**
    Navigate to `http://localhost:5173`
 
