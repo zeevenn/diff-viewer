@@ -3,9 +3,7 @@ import { DiffEditor } from '@monaco-editor/react'
 import { CloudUpload } from 'lucide-react'
 import { useRef, useState } from 'react'
 
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader } from '@/components/ui/card'
-import { Separator } from '@/components/ui/separator'
+import { Card, CardContent } from '@/components/ui/card'
 import { Typography } from '@/components/ui/typography'
 
 import { useTheme } from '../../context/theme-provider'
@@ -110,67 +108,8 @@ export function TextDiff() {
     })
   }
 
-  const refreshEditor = () => {
-    if (
-      editorRef.current
-      && editorRef.current.getOriginalEditor
-      && editorRef.current.getModifiedEditor
-    ) {
-      editorRef.current.getOriginalEditor().setValue(originalText)
-      editorRef.current.getModifiedEditor().setValue(modifiedText)
-    }
-  }
-
-  const clearContent = () => {
-    setOriginalText('')
-    setModifiedText('')
-    refreshEditor()
-  }
-
-  const loadSampleData = () => {
-    const newOriginal = 'function hello() {\n  console.log("Hello World");\n}'
-    const newModified
-      = 'function hello() {\n  console.log("Hello, World!");\n  return "Hello";\n}'
-
-    setOriginalText(newOriginal)
-    setModifiedText(newModified)
-    refreshEditor()
-  }
-
   return (
     <Card className="flex-1 flex flex-col py-0 gap-0">
-      {/* Toolbar */}
-      <CardHeader className="flex-row items-center justify-between px-4 py-3">
-        <div className="flex items-center gap-4">
-          <Typography variant="muted">
-            Original:
-            {' '}
-            {originalText.split('\n').length}
-            {' '}
-            lines
-          </Typography>
-          <Separator orientation="vertical" className="h-4" />
-          <Typography variant="muted">
-            Modified:
-            {' '}
-            {modifiedText.split('\n').length}
-            {' '}
-            lines
-          </Typography>
-        </div>
-
-        <div className="flex items-center gap-2">
-          <Button onClick={loadSampleData} size="sm">
-            Load Sample
-          </Button>
-          <Button onClick={clearContent} size="sm" variant="secondary">
-            Clear
-          </Button>
-        </div>
-      </CardHeader>
-
-      <Separator />
-
       {/* Diff Editor */}
       <CardContent className="flex-1 flex flex-col relative p-0">
         <DiffEditor
