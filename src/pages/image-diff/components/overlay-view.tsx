@@ -1,4 +1,6 @@
-import { useImageContainerSize } from '../../../hooks/useImageContainerSize'
+import { Slider } from '@/components/ui/slider'
+
+import { useImageContainerSize } from '../../../hooks/use-image-container-size'
 
 interface OverlayViewProps {
   originalImage: string | null
@@ -20,19 +22,19 @@ export function OverlayView({
 
   return (
     <div className="flex-1 flex flex-col">
-      <div className="flex items-center justify-center space-x-2 py-2">
-        <input
-          type="range"
-          min="0"
-          max="100"
-          value={overlayOpacity}
-          onChange={(e) => onOpacityChange(Number(e.target.value))}
-          className="w-50"
+      <div className="flex items-center justify-center gap-2 py-4 px-8">
+        <Slider
+          value={[overlayOpacity]}
+          onValueChange={value => onOpacityChange(value[0])}
+          min={0}
+          max={100}
+          step={1}
+          className="w-64"
         />
       </div>
       <div
         ref={containerRef}
-        className="flex-1 flex items-center justify-center relative bg-gray-100 dark:bg-gray-900"
+        className="flex-1 flex items-center justify-center relative bg-muted"
       >
         {originalImage && modifiedImage && containerSize && (
           <div

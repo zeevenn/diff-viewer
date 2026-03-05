@@ -13,7 +13,7 @@ import {
 import { Separator } from '@/components/ui/separator'
 import { Typography } from '@/components/ui/typography'
 
-export const NotFound = () => {
+export function NotFound() {
   const navigate = useNavigate()
 
   return (

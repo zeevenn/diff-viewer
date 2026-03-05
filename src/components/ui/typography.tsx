@@ -1,4 +1,5 @@
-import { cva, type VariantProps } from 'class-variance-authority'
+import type { VariantProps } from 'class-variance-authority'
+import { cva } from 'class-variance-authority'
 
 import { cn } from '@/lib/utils'
 
@@ -24,7 +25,7 @@ const typographyVariants = cva('', {
 
 interface TypographyProps
   extends React.HTMLAttributes<HTMLElement>,
-    VariantProps<typeof typographyVariants> {}
+  VariantProps<typeof typographyVariants> {}
 
 function Typography({ variant = 'p', className, ...props }: TypographyProps) {
   const classes = cn(typographyVariants({ variant, className }))

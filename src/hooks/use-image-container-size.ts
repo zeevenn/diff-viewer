@@ -47,7 +47,8 @@ export function useImageContainerSize(
       if (availableWidth / availableHeight > aspectRatio) {
         height = availableHeight
         width = height * aspectRatio
-      } else {
+      }
+      else {
         width = availableWidth
         height = width / aspectRatio
       }

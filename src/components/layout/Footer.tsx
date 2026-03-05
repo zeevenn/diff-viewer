@@ -1,7 +1,7 @@
 import { Button } from '../ui/button'
 import { Typography } from '../ui/typography'
 
-export const Footer = () => {
+export function Footer() {
   return (
     <footer className="bg-background border-t border-border">
       <div className="mx-auto px-4 sm:px-6 lg:px-8 py-4">

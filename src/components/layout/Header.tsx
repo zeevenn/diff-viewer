@@ -9,7 +9,7 @@ interface HeaderProps {
   className?: string
 }
 
-export const Header = ({ className = '' }: HeaderProps) => {
+export function Header({ className = '' }: HeaderProps) {
   const location = useLocation()
   const isActive = (path: string) => location.pathname === path
 

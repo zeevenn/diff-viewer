@@ -14,10 +14,10 @@ interface ComingSoonProps {
   className?: string
 }
 
-export const ComingSoon = ({
+export function ComingSoon({
   title = 'Coming Soon',
   description = 'This feature is under development and will be available soon.',
-}: ComingSoonProps) => {
+}: ComingSoonProps) {
   return (
     <div className="flex-1 flex items-center justify-center">
       <Card className="w-full max-w-md text-center">

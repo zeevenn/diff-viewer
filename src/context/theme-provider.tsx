@@ -2,13 +2,13 @@ import { createContext, use, useEffect, useState } from 'react'
 
 type Theme = 'dark' | 'light' | 'system'
 
-type ThemeProviderProps = {
+interface ThemeProviderProps {
   children: React.ReactNode
   defaultTheme?: Theme
   storageKey?: string
 }
 
-type ThemeProviderState = {
+interface ThemeProviderState {
   theme: Theme
   resolvedTheme: 'light' | 'dark'
   setTheme: (theme: Theme) => void
@@ -69,7 +69,7 @@ export function ThemeProvider({
   )
 }
 
-export const useTheme = () => {
+export function useTheme() {
   const context = use(ThemeProviderContext)
 
   if (context === undefined)

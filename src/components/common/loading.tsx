@@ -1,6 +1,6 @@
 import { Skeleton } from '@/components/ui/skeleton'
 
-export const Loading = () => {
+export function Loading() {
   return (
     <div className="flex space-x-1.5">
       <Skeleton className="size-2 rounded-full" />
