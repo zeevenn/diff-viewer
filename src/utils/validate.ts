@@ -54,11 +54,13 @@ export function validateFiles(
         if (acceptType.startsWith('.')) {
           // extension match
           return file.name.toLowerCase().endsWith(acceptType.toLowerCase())
-        } else if (acceptType.includes('*')) {
+        }
+        else if (acceptType.includes('*')) {
           // MIME type wildcard match
           const [mainType] = acceptType.split('/')
           return file.type.startsWith(mainType)
-        } else {
+        }
+        else {
           // exact MIME type match
           return file.type === acceptType
         }

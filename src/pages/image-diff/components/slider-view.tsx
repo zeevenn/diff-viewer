@@ -1,4 +1,6 @@
-import { useImageContainerSize } from '../../../hooks/useImageContainerSize'
+import { Slider } from '@/components/ui/slider'
+
+import { useImageContainerSize } from '../../../hooks/use-image-container-size'
 
 interface SliderViewProps {
   originalImage: string | null
@@ -20,19 +22,19 @@ export function SliderView({
 
   return (
     <div className="flex-1 flex flex-col">
-      <div className="flex items-center justify-center space-x-2 py-2">
-        <input
-          type="range"
-          min="0"
-          max="100"
-          value={sliderPosition}
-          onChange={(e) => onPositionChange(Number(e.target.value))}
-          className="w-50"
+      <div className="flex items-center justify-center gap-2 py-4 px-8">
+        <Slider
+          value={[sliderPosition]}
+          onValueChange={value => onPositionChange(value[0])}
+          min={0}
+          max={100}
+          step={1}
+          className="w-64"
         />
       </div>
       <div
         ref={containerRef}
-        className="flex-1 flex items-center justify-center relative bg-gray-100 dark:bg-gray-900 overflow-hidden"
+        className="flex-1 flex items-center justify-center relative bg-muted overflow-hidden"
       >
         {originalImage && modifiedImage && containerSize && (
           <div
@@ -58,7 +60,7 @@ export function SliderView({
             </div>
             {/* Modified Image Container - positioned from right */}
             <div
-              className="absolute right-0 top-0 bottom-0 overflow-hidden border-l border-red-500"
+              className="absolute right-0 top-0 bottom-0 overflow-hidden border-l border-destructive"
               style={{
                 width: `${100 - sliderPosition}%`,
               }}

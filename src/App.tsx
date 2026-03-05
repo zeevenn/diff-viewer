@@ -1,20 +1,20 @@
 import { BrowserRouter, Route, Routes } from 'react-router'
-
 import { Toaster } from 'sonner'
+
+import { NotFound } from './components/common'
 import { Layout } from './components/layout'
-import { NotFound } from './components/ui'
-import { useDynamicFavicon } from './hooks/useDynamicFavicon'
-import { useTheme } from './hooks/useTheme'
+import { useTheme } from './context/theme-provider'
+import { useDynamicFavicon } from './hooks/use-dynamic-favicon'
 import { ImageDiff, TextDiff } from './pages'
 
 function App() {
   useDynamicFavicon()
-  const { theme } = useTheme()
+  const { resolvedTheme } = useTheme()
 
   return (
     <BrowserRouter>
       <Layout>
-        <Toaster position="top-center" richColors theme={theme} />
+        <Toaster position="top-center" richColors theme={resolvedTheme} />
         <Routes>
           <Route path="/" element={<TextDiff />} />
           <Route path="/image" element={<ImageDiff />} />

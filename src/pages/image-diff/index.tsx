@@ -1,6 +1,18 @@
 import { useState } from 'react'
 
-import { ComingSoon } from '../../components/ui'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader } from '@/components/ui/card'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+import { Separator } from '@/components/ui/separator'
+import { Typography } from '@/components/ui/typography'
+
+import { ComingSoon } from '../../components/common'
 import { OverlayView, SideBySideView, SliderView } from './components'
 
 type ComparisonMode = 'side-by-side' | 'overlay' | 'slider' | 'difference'
@@ -18,12 +30,12 @@ export function ImageDiff() {
   const [originalImageInfo, setOriginalImageInfo] = useState<{
     name: string
     size: number
-    dimensions: { width: number; height: number }
+    dimensions: { width: number, height: number }
   } | null>(null)
   const [modifiedImageInfo, setModifiedImageInfo] = useState<{
     name: string
     size: number
-    dimensions: { width: number; height: number }
+    dimensions: { width: number, height: number }
   } | null>(null)
   const [comparisonMode, setComparisonMode] = useState<ComparisonMode>(
     COMPARISON_MODES.SIDE_BY_SIDE,
@@ -37,7 +49,7 @@ export function ImageDiff() {
   ): Promise<{
     name: string
     size: number
-    dimensions: { width: number; height: number }
+    dimensions: { width: number, height: number }
   }> => {
     return new Promise((resolve) => {
       const img = new Image()
@@ -56,7 +68,7 @@ export function ImageDiff() {
     const file = files[0]
     if (!file.type.startsWith('image/')) {
       // eslint-disable-next-line no-alert
-      alert('请选择图片文件')
+      alert('Please select an image file')
       return
     }
 
@@ -74,7 +86,7 @@ export function ImageDiff() {
     const file = files[0]
     if (!file.type.startsWith('image/')) {
       // eslint-disable-next-line no-alert
-      alert('请选择图片文件')
+      alert('Please select an image file')
       return
     }
 
@@ -131,7 +143,7 @@ export function ImageDiff() {
           />
         )
       case COMPARISON_MODES.DIFFERENCE:
-        return <ComingSoon />
+        return <ComingSoon title="Difference Mode" />
       default:
         return (
           <SideBySideView
@@ -145,62 +157,76 @@ export function ImageDiff() {
   }
 
   return (
-    <>
+    <Card className="flex-1 flex flex-col py-0 gap-0">
       {/* Toolbar */}
       {originalImageInfo && modifiedImageInfo && (
-        <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
-          <div className="flex items-center space-x-4">
-            {/* Comparison Mode Selector */}
-            <div className="flex items-center space-x-2">
-              <span className="text-sm text-gray-700 dark:text-gray-300">
-                Mode:
-              </span>
-              <select
-                value={comparisonMode}
-                onChange={(e) =>
-                  setComparisonMode(e.target.value as ComparisonMode)
-                }
-                className="text-sm border border-gray-300 dark:border-gray-600 rounded-md px-2 py-1 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300"
-              >
-                <option value={COMPARISON_MODES.SIDE_BY_SIDE}>
-                  Side by side
-                </option>
-                <option value={COMPARISON_MODES.OVERLAY}>Overlay</option>
-                <option value={COMPARISON_MODES.SLIDER}>Slider</option>
-                <option value={COMPARISON_MODES.DIFFERENCE}>Difference</option>
-              </select>
+        <>
+          <CardHeader className="flex-row items-center justify-between px-4 py-3">
+            <div className="flex items-center gap-4">
+              {/* Comparison Mode Selector */}
+              <div className="flex items-center gap-2">
+                <Typography variant="muted">Mode:</Typography>
+                <Select
+                  value={comparisonMode}
+                  onValueChange={value =>
+                    setComparisonMode(value as ComparisonMode)}
+                >
+                  <SelectTrigger className="w-[140px]">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value={COMPARISON_MODES.SIDE_BY_SIDE}>
+                      Side by side
+                    </SelectItem>
+                    <SelectItem value={COMPARISON_MODES.OVERLAY}>
+                      Overlay
+                    </SelectItem>
+                    <SelectItem value={COMPARISON_MODES.SLIDER}>
+                      Slider
+                    </SelectItem>
+                    <SelectItem value={COMPARISON_MODES.DIFFERENCE}>
+                      Difference
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <Separator orientation="vertical" className="h-4" />
+
+              {/* Image Info */}
+              <div className="flex items-center gap-4">
+                {originalImageInfo && (
+                  <Typography variant="muted">
+                    Original:
+                    {' '}
+                    {originalImageInfo.dimensions.width}
+                    ×
+                    {originalImageInfo.dimensions.height}
+                  </Typography>
+                )}
+                {modifiedImageInfo && (
+                  <Typography variant="muted">
+                    Modified:
+                    {' '}
+                    {modifiedImageInfo.dimensions.width}
+                    ×
+                    {modifiedImageInfo.dimensions.height}
+                  </Typography>
+                )}
+              </div>
             </div>
 
-            {/* Image Info */}
-            <div className="flex items-center space-x-4 text-xs text-gray-500 dark:text-gray-400">
-              {originalImageInfo && (
-                <span>
-                  Original: {originalImageInfo.dimensions.width}×
-                  {originalImageInfo.dimensions.height}
-                </span>
-              )}
-              {modifiedImageInfo && (
-                <span>
-                  Modified: {modifiedImageInfo.dimensions.width}×
-                  {modifiedImageInfo.dimensions.height}
-                </span>
-              )}
-            </div>
-          </div>
-
-          <div className="flex items-center space-x-2">
-            <button
-              type="button"
-              onClick={clearImages}
-              className="px-3 py-1 bg-gray-500 hover:bg-gray-600 text-white text-sm rounded-md cursor-pointer transition-colors"
-            >
+            <Button onClick={clearImages} size="sm" variant="secondary">
               Clear
-            </button>
-          </div>
-        </div>
+            </Button>
+          </CardHeader>
+          <Separator />
+        </>
       )}
 
-      {renderCurrentView()}
-    </>
+      <CardContent className="flex-1 flex flex-col p-0">
+        {renderCurrentView()}
+      </CardContent>
+    </Card>
   )
 }

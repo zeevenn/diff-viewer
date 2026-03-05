@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 
-import { Footer } from './Footer'
-import { Header } from './Header'
+import { Footer } from './footer'
+import { Header } from './header'
 
 interface LayoutProps {
   children: ReactNode
@@ -11,12 +11,12 @@ interface LayoutProps {
 export function Layout({ children, className = '' }: LayoutProps) {
   return (
     <div
-      className={`min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900 transition-colors ${className}`}
+      className={`min-h-screen flex flex-col bg-muted transition-colors ${className}`}
     >
       <Header />
 
       {/* Main Content Area */}
-      <main className="flex-1 mx-auto flex flex-col px-4 sm:px-6 lg:px-8 py-8 w-full">
+      <main className="flex-1 bg-background mx-auto flex flex-col px-4 sm:px-6 lg:px-8 py-8 w-full">
         {children}
       </main>
 

@@ -1,11 +1,12 @@
 import type { ReactNode } from 'react'
 import type { FileValidation, ValidationResult } from '../../utils'
 
-import { createContext, useCallback, useMemo, useRef } from 'react'
-import { useDropZone } from '../../context/useDropZone'
-import { useDragAndDrop } from '../../hooks/useDragAndDrop'
+import { Upload } from 'lucide-react'
+import { createContext, use, useCallback, useMemo, useRef } from 'react'
+import { useDragAndDrop } from '../../hooks/use-drag-and-drop'
 import { validateFiles } from '../../utils'
-import { DragIndicator, DragOverlay } from './DragOverlay'
+import { Typography } from '../ui/typography'
+import { DragIndicator, DragOverlay } from './drag-overlay'
 
 interface DragState {
   isDragging: boolean
@@ -19,12 +20,20 @@ interface DropZoneContextValue {
 
 const DropZoneContext = createContext<DropZoneContextValue | null>(null)
 
+function useDropZone() {
+  const context = use(DropZoneContext)
+  if (!context) {
+    throw new Error('useDropZone must be used within a DropZone component')
+  }
+  return context
+}
+
 interface DropZoneProps {
   children: ReactNode
   onFilesSelect: (
     files: FileList,
     validation: ValidationResult,
-    dropPosition?: { x: number; y: number },
+    dropPosition?: { x: number, y: number },
   ) => void
   validation?: FileValidation
   disabled?: boolean
@@ -41,8 +50,9 @@ export function DropZone({
   const dropZoneRef = useRef<HTMLDivElement>(null)
 
   const { isDragging } = useDragAndDrop(dropZoneRef, {
-    onFilesDrop: (files) => {
-      if (disabled) return
+    onFilesDrop: (files: FileList) => {
+      if (disabled)
+        return
 
       const validationResult = validateFiles(files, validation)
       onFilesSelect(files, validationResult)
@@ -54,7 +64,8 @@ export function DropZone({
 
   const handleFileSelect = useCallback(
     (files: FileList) => {
-      if (disabled) return
+      if (disabled)
+        return
 
       const validationResult = validateFiles(files, validation)
       onFilesSelect(files, validationResult)
@@ -168,36 +179,24 @@ interface DropZoneMessageProps {
 
 function DropZoneMessage({
   icon,
-  title = '拖拽文件到此处',
-  description = '或点击选择文件',
+  title = 'Drop files here',
+  description = 'or click to select',
   className = '',
 }: DropZoneMessageProps) {
   const defaultIcon = (
-    <svg
-      className="mx-auto h-12 w-12 text-gray-400"
-      stroke="currentColor"
-      fill="none"
-      viewBox="0 0 48 48"
-    >
-      <path
-        d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
-        strokeWidth={2}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
+    <Upload className="mx-auto h-12 w-12 text-muted-foreground" />
   )
 
   return (
     <div className={`text-center ${className}`}>
       {icon || defaultIcon}
       <div className="mt-2">
-        <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
+        <Typography variant="small" className="text-foreground">
           {title}
-        </p>
-        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+        </Typography>
+        <Typography variant="muted" className="mt-1">
           {description}
-        </p>
+        </Typography>
       </div>
     </div>
   )
@@ -205,7 +204,7 @@ function DropZoneMessage({
 
 function DropZoneDragIndicator({
   children,
-  className = 'bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg',
+  className = 'bg-primary text-primary-foreground px-4 py-2 rounded-lg shadow-lg',
 }: {
   children: ReactNode
   className?: string

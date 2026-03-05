@@ -1,3 +1,3 @@
-export { OverlayView } from './OverlayView'
-export { SideBySideView } from './SideBySideView'
-export { SliderView } from './SliderView'
+export { OverlayView } from './overlay-view'
+export { SideBySideView } from './side-by-side-view'
+export { SliderView } from './slider-view'
