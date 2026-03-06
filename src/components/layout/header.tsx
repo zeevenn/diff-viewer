@@ -24,7 +24,7 @@ export function Header({ className = '' }: HeaderProps) {
             <Link to="/" className="flex-shrink-0 flex items-center space-x-3">
               <Logo className="w-10 h-10" />
               <Typography variant="h4" className="text-foreground">
-                Diff Viewer
+                Tool Box
               </Typography>
             </Link>
 
@@ -51,7 +51,7 @@ export function Header({ className = '' }: HeaderProps) {
           <div className="flex items-center">
             <Button variant="ghost" size="sm" asChild>
               <a
-                href="https://github.com/zeevenn/diff-viewer"
+                href="https://github.com/zeevenn/tool-box"
                 target="_blank"
                 rel="noopener noreferrer"
                 title="View on GitHub"

@@ -7,13 +7,12 @@ export function Footer() {
       <div className="mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <div className="flex flex-col md:flex-row justify-between items-center">
           <Typography variant="muted" className="text-center">
-            Diff Viewer - A simple real-time diff viewer including text and
-            image.
+            Tool Box - A collection of useful tools.
           </Typography>
           <div className="flex mt-4 md:mt-0">
             <Button variant="link" size="sm" asChild>
               <a
-                href="https://github.com/zeevenn/diff-viewer/issues"
+                href="https://github.com/zeevenn/tool-box/issues"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -22,7 +21,7 @@ export function Footer() {
             </Button>
             <Button variant="link" size="sm" asChild>
               <a
-                href="https://github.com/zeevenn/diff-viewer/discussions"
+                href="https://github.com/zeevenn/tool-box/discussions"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -31,7 +30,7 @@ export function Footer() {
             </Button>
             <Button variant="link" size="sm" asChild>
               <a
-                href="https://github.com/zeevenn/diff-viewer/blob/master/LICENSE"
+                href="https://github.com/zeevenn/tool-box/blob/master/LICENSE"
                 target="_blank"
                 rel="noopener noreferrer"
               >
