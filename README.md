@@ -1,6 +1,6 @@
-# Diff Viewer
+# Tool Box
 
-A simple real-time diff viewer including text and image.
+A collection of useful tools.
 
 ## ✨ Features
 
@@ -9,14 +9,14 @@ A simple real-time diff viewer including text and image.
 
 ## 🚀 Live Demo
 
-Visit the live demo at: [diff.ziven.me](https://diff.ziven.me)
+Visit the live demo at: [tool.ziven.me](https://tool.ziven.me)
 
 ### Local Development
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/zeevenn/diff-viewer.git
-   cd diff-viewer
+   git clone https://github.com/zeevenn/tool-box.git
+   cd tool-box
    ```
 
 2. **Install dependencies**
