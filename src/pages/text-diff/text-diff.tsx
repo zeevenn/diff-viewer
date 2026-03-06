@@ -1,12 +1,10 @@
-import type { MonacoDiffEditor } from '@monaco-editor/react'
-import { DiffEditor } from '@monaco-editor/react'
+import type { MergeView } from '@codemirror/merge'
 import { CloudUpload } from 'lucide-react'
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 
-import { Card, CardContent } from '@/components/ui/card'
+import { CodeMirrorMerge } from '@/components/common'
 import { Typography } from '@/components/ui/typography'
 
-import { useTheme } from '../../context/theme-provider'
 import { useDragAndDrop } from '../../hooks/use-drag-and-drop'
 
 type DropZone = 'original' | 'modified'
@@ -23,10 +21,6 @@ export function TextDiff() {
   const [modifiedText, setModifiedText] = useState(
     'function hello() {\n  console.log("Hello, World!");\n  return "Hello";\n}',
   )
-  const editorRef = useRef<MonacoDiffEditor | null>(null)
-  const originalDropZoneRef = useRef<HTMLElement | null>(null)
-  const modifiedDropZoneRef = useRef<HTMLElement | null>(null)
-  const { resolvedTheme } = useTheme()
 
   const formatContentIfJSON = (content: string): string => {
     try {
@@ -74,97 +68,61 @@ export function TextDiff() {
     },
   })
 
-  const handleEditorDidMount = (editor: MonacoDiffEditor) => {
-    editorRef.current = editor
-    originalDropZoneRef.current = editor.getOriginalEditor().getDomNode()
-    modifiedDropZoneRef.current = editor.getModifiedEditor().getDomNode()
+  const handleMount = (view: MergeView) => {
+    const aEditor = view.a.dom
+    const bEditor = view.b.dom
 
-    if (originalDropZoneRef.current) {
-      registerOriginalDropZone(originalDropZoneRef.current)
+    if (aEditor) {
+      registerOriginalDropZone(aEditor)
     }
-    if (modifiedDropZoneRef.current) {
-      registerModifiedDropZone(modifiedDropZoneRef.current)
+    if (bEditor) {
+      registerModifiedDropZone(bEditor)
     }
-
-    const originalEditor = editor.getOriginalEditor()
-    const modifiedEditor = editor.getModifiedEditor()
-
-    originalEditor.onDidPaste(() => {
-      const content = originalEditor.getValue()
-      const formattedContent = formatContentIfJSON(content)
-      if (content !== formattedContent) {
-        originalEditor.setValue(formattedContent)
-        setOriginalText(formattedContent)
-      }
-    })
-
-    modifiedEditor.onDidPaste(() => {
-      const content = modifiedEditor.getValue()
-      const formattedContent = formatContentIfJSON(content)
-      if (content !== formattedContent) {
-        modifiedEditor.setValue(formattedContent)
-        setModifiedText(formattedContent)
-      }
-    })
   }
 
   return (
-    <Card className="flex-1 flex flex-col py-0 gap-0">
-      {/* Diff Editor */}
-      <CardContent className="flex-1 flex flex-col relative p-0">
-        <DiffEditor
-          wrapperProps={{
-            className: 'flex-1',
-          }}
-          theme={resolvedTheme === 'dark' ? 'vs-dark' : 'vs'}
-          original={originalText}
-          modified={modifiedText}
-          onMount={handleEditorDidMount}
-          options={{
-            readOnly: false,
-            minimap: { enabled: false },
-            scrollBeyondLastLine: false,
-            fontSize: 14,
-            lineNumbers: 'on',
-            enableSplitViewResizing: false,
-            ignoreTrimWhitespace: false,
-            renderIndicators: true,
-            originalEditable: true,
-          }}
-        />
+    <div className="flex-1 relative overflow-hidden">
+      <CodeMirrorMerge
+        originalValue={originalText}
+        modifiedValue={modifiedText}
+        onOriginalChange={setOriginalText}
+        onModifiedChange={setModifiedText}
+        onOriginalPaste={formatContentIfJSON}
+        onModifiedPaste={formatContentIfJSON}
+        onMount={handleMount}
+      />
 
-        {/* Original Drop Overlay */}
-        {isOriginalDragging && (
-          <div className="absolute top-0 left-0 w-1/2 h-full pointer-events-none bg-primary/20 border-2 border-primary border-dashed">
-            <div className="flex items-center justify-center h-full">
-              <div className="bg-primary text-primary-foreground px-4 py-2 rounded-lg shadow-lg">
-                <div className="flex items-center gap-2">
-                  <CloudUpload className="size-5" />
-                  <Typography variant="small">
-                    Drag to update original content
-                  </Typography>
-                </div>
+      {/* Original Drop Overlay */}
+      {isOriginalDragging && (
+        <div className="absolute top-0 left-0 w-1/2 h-full pointer-events-none bg-primary/20 border-2 border-primary border-dashed">
+          <div className="flex items-center justify-center h-full">
+            <div className="bg-primary text-primary-foreground px-4 py-2 rounded-lg shadow-lg">
+              <div className="flex items-center gap-2">
+                <CloudUpload className="size-5" />
+                <Typography variant="small">
+                  Drag to update original content
+                </Typography>
               </div>
             </div>
           </div>
-        )}
+        </div>
+      )}
 
-        {/* Modified Drop Overlay */}
-        {isModifiedDragging && (
-          <div className="absolute top-0 right-0 w-1/2 h-full pointer-events-none bg-accent/20 border-2 border-accent-foreground border-dashed">
-            <div className="flex items-center justify-center h-full">
-              <div className="bg-accent text-accent-foreground px-4 py-2 rounded-lg shadow-lg">
-                <div className="flex items-center gap-2">
-                  <CloudUpload className="size-5" />
-                  <Typography variant="small">
-                    Drag to update modified content
-                  </Typography>
-                </div>
+      {/* Modified Drop Overlay */}
+      {isModifiedDragging && (
+        <div className="absolute top-0 right-0 w-1/2 h-full pointer-events-none bg-accent/20 border-2 border-accent-foreground border-dashed">
+          <div className="flex items-center justify-center h-full">
+            <div className="bg-accent text-accent-foreground px-4 py-2 rounded-lg shadow-lg">
+              <div className="flex items-center gap-2">
+                <CloudUpload className="size-5" />
+                <Typography variant="small">
+                  Drag to update modified content
+                </Typography>
               </div>
             </div>
           </div>
-        )}
-      </CardContent>
-    </Card>
+        </div>
+      )}
+    </div>
   )
 }
