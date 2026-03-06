@@ -205,3 +205,24 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+/* CodeMirror MergeView height fix */
+.cm-mergeView {
+  height: 100% !important;
+}
+
+.cm-mergeViewEditors {
+  height: 100% !important;
+}
+
+.cm-mergeViewEditor {
+  height: 100% !important;
+}
+
+.cm-mergeViewEditor .cm-editor {
+  height: 100% !important;
+}
+
+.cm-mergeViewEditor .cm-scroller {
+  overflow: auto !important;
+}
